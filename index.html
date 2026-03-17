@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Prénom Nom</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,700;0,9..144,900;1,9..144,200;1,9..144,400;1,9..144,700&family=Outfit:wght@200;300;400;500;600&family=Fira+Code:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+:root{
+  --bg:    #f6f1e7;
+  --dark:  #1b1208;
+  --amber: #bf7a28;
+  --rust:  #8a3918;
+  --dusty: #9e8060;
+  --mist:  #9a8f80;
+  --sage:  #5a7050;
+  --paper: #ede5d0;
+  --f0: 'Fraunces', Georgia, serif;
+  --f1: 'Outfit', sans-serif;
+  --f2: 'Fira Code', monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--dark);
+  font-family: var(--f1);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* grain */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 9000; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  opacity: .7;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem;
+  background: rgba(246,241,231,.92); backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(191,122,40,.14);
+}
+.n-logo { font-family: var(--f0); font-style: italic; font-size: 1rem; font-weight: 200; color: var(--dark); letter-spacing:.02em; }
+.n-links { display: flex; list-style: none; gap: .2rem; }
+.n-links a {
+  display: flex; align-items: center; height: 32px;
+  padding: 0 .9rem;
+  font-family: var(--f2); font-size: .52rem; letter-spacing: .14em; text-transform: uppercase;
+  text-decoration: none; color: var(--mist);
+  border: 1px solid transparent; border-radius: 2px;
+  transition: color .2s, border-color .2s;
+}
+.n-links a:hover { color: var(--dark); border-color: rgba(191,122,40,.25); }
+.n-links li:last-child a { border-color: var(--dark); color: var(--dark); }
+.n-links li:last-child a:hover { background: var(--dark); color: var(--bg); }
+
+/* ══════════════════════
+   HERO — plein écran centré
+══════════════════════ */
+#hero {
+  height: 100vh;
+  background: var(--dark); color: var(--bg);
+  display: grid; grid-template-rows: 1fr auto;
+  padding-top: 56px;
+  position: relative; overflow: hidden;
+}
+.h-center {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 3rem 2.5rem;
+  position: relative; z-index: 2;
+}
+.h-bg {
+  position: absolute; font-family: var(--f0); font-weight: 900; font-style: italic;
+  font-size: clamp(14rem, 35vw, 40rem); line-height: .85;
+  color: transparent; -webkit-text-stroke: 1px rgba(246,241,231,.04);
+  top: 50%; left: 50%; transform: translate(-50%,-52%);
+  pointer-events: none; user-select: none; letter-spacing: -.04em; white-space: nowrap;
+}
+.h-eyebrow {
+  font-family: var(--f2); font-size: .52rem; letter-spacing: .4em; text-transform: uppercase;
+  color: var(--amber); margin-bottom: 2.5rem;
+  display: flex; align-items: center; gap: .8rem;
+}
+.h-eyebrow::before, .h-eyebrow::after { content: '—'; opacity: .4; }
+.hdot-wrap {
+  position: absolute; top: calc(56px + 1.8rem); right: 2.5rem;
+  font-family: var(--f2); font-size: .5rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--dusty); display: flex; align-items: center; gap: .5rem; z-index: 3;
+}
+.hdot { width: 5px; height: 5px; border-radius: 50%; background: var(--sage); animation: pulse 2.5s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.15} }
+.h-name {
+  font-family: var(--f0); font-weight: 900;
+  font-size: clamp(4.5rem, 13vw, 11rem);
+  line-height: .88; letter-spacing: -.03em;
+  position: relative; z-index: 2; margin-bottom: 1.5rem; text-align: center;
+}
+.h-name .top { display: block; opacity: .2; }
+.h-name .bot { display: block; }
+.h-role {
+  font-family: var(--f0); font-style: italic; font-weight: 200;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  color: rgba(246,241,231,.35); position: relative; z-index: 2;
+  margin-bottom: 2.5rem; display: block; letter-spacing: .02em;
+}
+.h-quote {
+  font-family: var(--f0); font-style: italic; font-weight: 200;
+  font-size: clamp(.85rem, 1.3vw, 1rem);
+  color: rgba(246,241,231,.28); line-height: 1.8;
+  max-width: 340px; text-align: center; position: relative; z-index: 2;
+}
+.h-bar {
+  display: flex; align-items: stretch;
+  border-top: 1px solid rgba(246,241,231,.08); position: relative; z-index: 2;
+}
+.h-bar-item {
+  flex: 1; padding: 1rem 1.5rem;
+  border-right: 1px solid rgba(246,241,231,.08);
+  font-family: var(--f2); font-size: .48rem; letter-spacing: .15em; text-transform: uppercase;
+  color: rgba(246,241,231,.28); line-height: 1.8;
+}
+.h-bar-item:last-child { border-right: none; }
+.h-bar-item strong { display: block; color: rgba(246,241,231,.65); font-weight: 400; font-size: .56rem; margin-bottom: .1rem; }
+.h-scroll {
+  position: absolute; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
+  font-family: var(--f2); font-size: .48rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--dusty); display: flex; align-items: center; gap: .5rem; z-index: 3;
+  animation: nudge 2s ease-in-out infinite;
+}
+.h-scroll::after { content: '↓'; color: var(--amber); }
+@keyframes nudge { 0%,100%{transform:translateX(-50%) translateY(0);opacity:.5} 50%{transform:translateX(-50%) translateY(4px);opacity:1} }
+
+/* ══════════════════════
+   LAYOUT STICKY — comme Adoratorio
+   gauche : titre sticky
+   droite : contenu qui scroll
+══════════════════════ */
+.sticky-section {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  min-height: 100vh;
+  border-top: 1px solid rgba(191,122,40,.15);
+}
+
+/* colonne gauche sticky */
+.sticky-left {
+  position: sticky; top: 56px;
+  height: calc(100vh - 56px);
+  display: flex; flex-direction: column; justify-content: center;
+  align-items: flex-end; text-align: right;
+  padding: 3rem 2.5rem;
+  border-right: 1px solid rgba(191,122,40,.15);
+  background: var(--bg);
+  gap: 1.5rem;
+}
+.sl-num {
+  font-family: var(--f2); font-size: .5rem; letter-spacing: .35em;
+  text-transform: uppercase; color: var(--amber);
+}
+.sl-title {
+  font-family: var(--f0); font-weight: 900; font-style: italic;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: .88; letter-spacing: -.03em; color: var(--dark);
+}
+.sl-verse {
+  font-family: var(--f0); font-style: italic; font-weight: 200;
+  font-size: .82rem; color: var(--mist); line-height: 1.75;
+  border-right: 1px solid rgba(191,122,40,.3); padding-right: .9rem;
+  max-width: 220px;
+}
+
+/* colonne droite scroll */
+.sticky-right {
+  padding: 5rem 4rem 6rem;
+  background: var(--bg);
+}
+
+/* dark variant */
+.sticky-section.dark { background: var(--dark); color: var(--bg); border-top-color: rgba(246,241,231,.07); }
+.sticky-section.dark .sticky-left { background: var(--dark); border-right-color: rgba(246,241,231,.08); }
+.sticky-section.dark .sl-title { color: var(--bg); }
+.sticky-section.dark .sl-verse { color: rgba(246,241,231,.28); border-color: rgba(191,122,40,.35); }
+.sticky-section.dark .sticky-right { background: var(--dark); }
+
+/* paper variant */
+.sticky-section.paper .sticky-left { background: var(--paper); }
+.sticky-section.paper .sticky-right { background: var(--paper); }
+
+/* ── ABOUT ── */
+.about-big {
+  font-family: var(--f0); font-weight: 900;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: .92; letter-spacing: -.025em;
+  color: var(--dark); margin-bottom: 1.2rem;
+}
+.about-sub {
+  font-family: var(--f0); font-style: italic; font-weight: 200;
+  font-size: clamp(1rem, 1.8vw, 1.3rem);
+  color: var(--amber); margin-bottom: 3rem; line-height: 1.6;
+}
+.about-big strong { font-style: normal; font-weight: 700; color: var(--amber); }
+.about-body {
+  font-family: var(--f1); font-weight: 300; font-size: .93rem;
+  color: var(--mist); line-height: 2; margin-bottom: 3.5rem;
+}
+.about-body p { margin-bottom: .9rem; }
+.about-body strong { color: var(--dark); font-weight: 500; }
+.about-facts {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  border: 1px solid rgba(191,122,40,.2);
+}
+.af {
+  padding: 1.1rem 1.4rem;
+  border-right: 1px solid rgba(191,122,40,.18);
+  border-bottom: 1px solid rgba(191,122,40,.18);
+}
+.af:nth-child(2n) { border-right: none; }
+.af:nth-last-child(-n+2) { border-bottom: none; }
+.af-k { font-family: var(--f2); font-size: .48rem; letter-spacing: .28em; text-transform: uppercase; color: var(--amber); margin-bottom: .35rem; }
+.af-v { font-family: var(--f0); font-style: italic; font-size: .92rem; color: var(--dark); }
+
+/* ── SKILLS content ── */
+.sk-group { margin-bottom: 3rem; }
+.sk-group:last-child { margin-bottom: 0; }
+.skg-lbl {
+  font-family: var(--f2); font-size: .48rem; letter-spacing: .3em; text-transform: uppercase;
+  color: rgba(246,241,231,.3); margin-bottom: 1.2rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.skg-lbl::after { content: ''; flex: 1; height: 1px; background: rgba(246,241,231,.1); }
+.sk-row {
+  display: flex; align-items: center; gap: 1.5rem;
+  padding: .7rem 0; border-bottom: 1px solid rgba(246,241,231,.07);
+}
+.sk-row:last-child { border-bottom: none; }
+.sk-n { font-family: var(--f0); font-style: italic; font-size: .98rem; color: var(--bg); min-width: 155px; }
+.sk-bar { flex: 1; height: 1px; background: rgba(246,241,231,.1); position: relative; }
+.sk-fill {
+  position: absolute; top: -1.5px; left: 0; height: 4px; border-radius: 2px;
+  background: linear-gradient(to right, var(--amber), var(--rust));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 1s cubic-bezier(.4,0,.2,1);
+}
+.sk-fill.on { transform: scaleX(1); }
+.sk-lv { font-family: var(--f2); font-size: .46rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(246,241,231,.3); min-width: 70px; text-align: right; }
+
+/* ── PROJECTS content ── */
+.proj { padding: 2.8rem 0; border-bottom: 1px solid rgba(191,122,40,.12); }
+.proj:first-child { padding-top: 0; }
+.proj:last-child { border-bottom: none; }
+.proj-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; gap: 1rem; flex-wrap: wrap; }
+.proj-meta { display: flex; align-items: center; gap: .8rem; }
+.p-num { font-family: var(--f2); font-size: .48rem; letter-spacing: .2em; color: var(--amber); }
+.p-badge { font-family: var(--f2); font-size: .46rem; letter-spacing: .1em; text-transform: uppercase; color: var(--mist); padding: .2rem .6rem; border: 1px solid rgba(191,122,40,.22); }
+.p-btns { display: flex; gap: .5rem; }
+.p-btn {
+  font-family: var(--f2); font-size: .46rem; letter-spacing: .1em; text-transform: uppercase;
+  text-decoration: none; color: var(--dark); padding: .3rem .8rem;
+  border: 1px solid rgba(27,18,8,.22); transition: all .2s;
+}
+.p-btn.hi, .p-btn:hover { background: var(--dark); color: var(--bg); border-color: var(--dark); }
+.p-title {
+  font-family: var(--f0); font-weight: 900; font-style: italic;
+  font-size: clamp(1.8rem, 4vw, 3.2rem); line-height: .9; letter-spacing: -.02em;
+  color: var(--dark); margin-bottom: .8rem;
+}
+.p-desc { font-family: var(--f0); font-style: italic; font-weight: 200; font-size: .95rem; color: var(--mist); line-height: 1.85; max-width: 580px; margin-bottom: 1.1rem; }
+.p-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+.ptag { font-family: var(--f2); font-size: .46rem; letter-spacing: .08em; color: var(--dusty); padding: .2rem .6rem; background: rgba(191,122,40,.07); border: 1px solid rgba(191,122,40,.2); }
+
+/* ── FORMATION content ── */
+.fe { padding: 2.2rem 0; border-bottom: 1px solid rgba(246,241,231,.07); }
+.fe:first-child { padding-top: 0; }
+.fe:last-child { border-bottom: none; }
+.fe-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: .4rem; flex-wrap: wrap; }
+.fe-title { font-family: var(--f0); font-style: italic; font-weight: 200; font-size: clamp(1.1rem, 2vw, 1.6rem); color: var(--bg); }
+.fe-yr { font-family: var(--f2); font-size: .48rem; letter-spacing: .2em; color: var(--amber); white-space: nowrap; }
+.fe-where { font-family: var(--f0); font-style: italic; font-size: .82rem; color: rgba(246,241,231,.3); margin-bottom: .5rem; }
+.fe-body { font-family: var(--f1); font-weight: 300; font-size: .86rem; color: rgba(246,241,231,.4); line-height: 1.85; max-width: 580px; }
+.stage-box {
+  margin-top: 2.5rem; padding: 2.2rem;
+  border: 1px solid rgba(191,122,40,.3); background: rgba(191,122,40,.06);
+  position: relative;
+}
+.stage-box::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px; background: var(--amber); }
+.sb-lbl { font-family: var(--f2); font-size: .48rem; letter-spacing: .28em; text-transform: uppercase; color: var(--amber); margin-bottom: .8rem; }
+.sb-title { font-family: var(--f0); font-style: italic; font-weight: 200; font-size: clamp(1.2rem, 2.5vw, 2rem); color: var(--bg); line-height: 1.1; margin-bottom: .7rem; }
+.sb-body { font-family: var(--f1); font-weight: 300; font-size: .86rem; color: rgba(246,241,231,.4); line-height: 1.9; max-width: 540px; margin-bottom: 1.1rem; }
+.sb-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+.sb-tag { font-family: var(--f2); font-size: .46rem; padding: .2rem .6rem; border: 1px solid rgba(246,241,231,.15); color: rgba(246,241,231,.35); }
+
+/* ── CONTACT content ── */
+.c-big {
+  font-family: var(--f0); font-weight: 900; font-style: italic;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  line-height: .9; letter-spacing: -.025em; color: var(--dark);
+  margin-bottom: 1.2rem;
+}
+.c-big span { color: var(--amber); }
+.c-note {
+  font-family: var(--f0); font-style: italic; font-weight: 200;
+  font-size: .95rem; color: var(--mist); line-height: 1.85; max-width: 420px;
+  margin-bottom: 3.5rem;
+  border-left: 2px solid rgba(191,122,40,.4); padding-left: 1.1rem;
+}
+.clinks { display: flex; flex-direction: column; }
+.clink {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 0; border-bottom: 1px solid rgba(191,122,40,.14);
+  text-decoration: none; color: var(--dark); gap: 1rem;
+  transition: padding-left .3s;
+}
+.clink:last-child { border-bottom: none; }
+.clink:hover { padding-left: .5rem; }
+.cl-l { display: flex; align-items: baseline; gap: 1.3rem; }
+.cl-lbl { font-family: var(--f2); font-size: .48rem; letter-spacing: .22em; text-transform: uppercase; color: var(--dusty); min-width: 68px; }
+.cl-val { font-family: var(--f0); font-style: italic; font-size: .98rem; color: var(--dark); }
+.cl-arr { font-family: var(--f2); font-size: .52rem; color: var(--amber); opacity: 0; transition: opacity .2s, transform .2s; }
+.clink:hover .cl-arr { opacity: 1; transform: translateX(4px); }
+.c-foot {
+  margin-top: 4rem; padding-top: 1.8rem; border-top: 1px solid rgba(191,122,40,.15);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+}
+.cf-c { font-family: var(--f2); font-size: .46rem; letter-spacing: .18em; text-transform: uppercase; color: var(--mist); }
+.cf-m { font-family: var(--f0); font-style: italic; font-size: .82rem; color: var(--mist); }
+
+/* ── REVEAL ── */
+.r { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+.r.on { opacity: 1; transform: none; }
+.r.d1{transition-delay:.06s} .r.d2{transition-delay:.12s} .r.d3{transition-delay:.18s}
+
+/* ── MOBILE ── */
+@media (max-width: 760px) {
+  nav { padding: 0 1.5rem; }
+  .n-links { display: none; }
+  #hero { padding: 0 1.5rem 3rem; }
+  .h-eyebrow { left: 1.5rem; }
+  .h-status { right: 1.5rem; }
+  .sticky-section { grid-template-columns: 1fr; }
+  .sticky-left { position: static; height: auto; padding: 2.5rem 1.5rem; border-right: none; border-bottom: 1px solid rgba(191,122,40,.15); align-items: flex-start; text-align: left; }
+  .sl-verse { border-right: none; border-left: 1px solid rgba(191,122,40,.3); padding-right: 0; padding-left: .9rem; }
+  .sticky-section.dark .sticky-left { border-bottom-color: rgba(246,241,231,.08); }
+  .sticky-right { padding: 2.5rem 1.5rem 4rem; }
+  .about-facts { grid-template-columns: 1fr; }
+  .af { border-right: none; }
+  .af:nth-last-child(-n+2) { border-bottom: 1px solid rgba(191,122,40,.18); }
+  .af:last-child { border-bottom: none; }
+  .proj-head { flex-direction: column; }
+  .fe-head { flex-direction: column; gap: .2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="n-logo">Prénom Nom</div>
+  <ul class="n-links">
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#skills">Compétences</a></li>
+    <li><a href="#projects">Projets</a></li>
+    <li><a href="#formation">Parcours</a></li>
+    <li><a href="#contact">Contact ↗</a></li>
+  </ul>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="h-bg">code</div>
+  <div class="hdot-wrap"><span class="hdot"></span>Disponible 2025</div>
+  <div class="h-center">
+    <div class="h-eyebrow">BTS SIO — Option SLAM — 2ᵉ Année</div>
+    <h1 class="h-name">
+      <span class="top">Prénom</span>
+      <span class="bot">Nom</span>
+    </h1>
+    <span class="h-role">Développeur logiciel & applications.</span>
+    <p class="h-quote">Je construis des choses qui fonctionnent —<br/>avec soin, logique, et l'envie de faire<br/>mieux à chaque ligne.</p>
+  </div>
+  <div class="h-bar">
+    <div class="h-bar-item"><strong>BTS SIO SLAM</strong>Formation</div>
+    <div class="h-bar-item"><strong>France</strong>Localisation</div>
+    <div class="h-bar-item"><strong>Stage / Alternance</strong>Recherche</div>
+    <div class="h-bar-item"><strong>2025</strong>Disponible</div>
+  </div>
+  <div class="h-scroll">Scroll</div>
+</section>
+
+<!-- ══ ABOUT ══ -->
+<div class="sticky-section" id="about">
+  <div class="sticky-left">
+    <div class="sl-num">01</div>
+    <div class="sl-title">À<br/>pro<br/>pos</div>
+    <div class="sl-verse">— il y a une poésie dans chaque ligne de code bien écrite —</div>
+  </div>
+  <div class="sticky-right">
+    <div class="about-big r">
+      Je n'écris pas du code —<br/>je résous des<br/>problèmes.
+    </div>
+    <div class="about-sub r">avec du code, avec soin, avec méthode.</div>
+    <div class="about-body r d1">
+      <p>En deuxième année de <strong>BTS SIO option SLAM</strong>, j'ai appris à penser les systèmes avant de les coder. Du modèle de données jusqu'à l'interface, j'aime voir l'ensemble avant de descendre dans les détails.</p>
+      <p>Ce qui me motive, c'est la <strong>résolution de problèmes concrets</strong>. Pas coder pour coder — comprendre un besoin, concevoir une solution, la livrer proprement. La qualité, la lisibilité, la maintenabilité ne sont pas des options.</p>
+      <p>Je cherche un environnement où je peux <strong>contribuer vraiment</strong>, apprendre auprès de gens expérimentés et grandir sur des projets qui ont du sens.</p>
+    </div>
+    <div class="about-facts r d2">
+      <div class="af"><div class="af-k">Formation</div><div class="af-v">BTS SIO — SLAM</div></div>
+      <div class="af"><div class="af-k">Établissement</div><div class="af-v">Nom · Ville</div></div>
+      <div class="af"><div class="af-k">Recherche</div><div class="af-v">Stage / Alternance</div></div>
+      <div class="af"><div class="af-k">Langues</div><div class="af-v">Français · Anglais</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SKILLS ══ -->
+<div class="sticky-section dark" id="skills">
+  <div class="sticky-left">
+    <div class="sl-num">02</div>
+    <div class="sl-title">Com<br/>pé<br/>tences</div>
+    <div class="sl-verse">— chaque compétence apprise est une saison traversée —</div>
+  </div>
+  <div class="sticky-right">
+
+    <div class="sk-group r d1">
+      <div class="skg-lbl">Langages</div>
+      <div class="sk-row"><span class="sk-n">HTML / CSS</span><div class="sk-bar"><div class="sk-fill" data-w=".92"></div></div><span class="sk-lv">Maîtrisé</span></div>
+      <div class="sk-row"><span class="sk-n">PHP</span><div class="sk-bar"><div class="sk-fill" data-w=".82"></div></div><span class="sk-lv">Avancé</span></div>
+      <div class="sk-row"><span class="sk-n">JavaScript</span><div class="sk-bar"><div class="sk-fill" data-w=".76"></div></div><span class="sk-lv">Avancé</span></div>
+      <div class="sk-row"><span class="sk-n">SQL</span><div class="sk-bar"><div class="sk-fill" data-w=".82"></div></div><span class="sk-lv">Avancé</span></div>
+      <div class="sk-row"><span class="sk-n">Python</span><div class="sk-bar"><div class="sk-fill" data-w=".65"></div></div><span class="sk-lv">Intermédiaire</span></div>
+      <div class="sk-row"><span class="sk-n">Java</span><div class="sk-bar"><div class="sk-fill" data-w=".58"></div></div><span class="sk-lv">Intermédiaire</span></div>
+    </div>
+
+    <div class="sk-group r d2">
+      <div class="skg-lbl">Frameworks & Bases de données</div>
+      <div class="sk-row"><span class="sk-n">Symfony</span><div class="sk-bar"><div class="sk-fill" data-w=".76"></div></div><span class="sk-lv">Avancé</span></div>
+      <div class="sk-row"><span class="sk-n">React</span><div class="sk-bar"><div class="sk-fill" data-w=".64"></div></div><span class="sk-lv">Intermédiaire</span></div>
+      <div class="sk-row"><span class="sk-n">Node.js</span><div class="sk-bar"><div class="sk-fill" data-w=".60"></div></div><span class="sk-lv">Intermédiaire</span></div>
+      <div class="sk-row"><span class="sk-n">MySQL / MariaDB</span><div class="sk-bar"><div class="sk-fill" data-w=".82"></div></div><span class="sk-lv">Avancé</span></div>
+      <div class="sk-row"><span class="sk-n">PostgreSQL</span><div class="sk-bar"><div class="sk-fill" data-w=".64"></div></div><span class="sk-lv">Intermédiaire</span></div>
+    </div>
+
+    <div class="sk-group r d3">
+      <div class="skg-lbl">Méthodes & Outils</div>
+      <div class="sk-row"><span class="sk-n">Git / GitHub</span><div class="sk-bar"><div class="sk-fill" data-w=".84"></div></div><span class="sk-lv">Avancé</span></div>
+      <div class="sk-row"><span class="sk-n">Agile / Scrum</span><div class="sk-bar"><div class="sk-fill" data-w=".76"></div></div><span class="sk-lv">Avancé</span></div>
+      <div class="sk-row"><span class="sk-n">UML / Merise</span><div class="sk-bar"><div class="sk-fill" data-w=".78"></div></div><span class="sk-lv">Avancé</span></div>
+      <div class="sk-row"><span class="sk-n">REST API</span><div class="sk-bar"><div class="sk-fill" data-w=".72"></div></div><span class="sk-lv">Avancé</span></div>
+      <div class="sk-row"><span class="sk-n">Docker / Linux</span><div class="sk-bar"><div class="sk-fill" data-w=".60"></div></div><span class="sk-lv">Intermédiaire</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ PROJECTS ══ -->
+<div class="sticky-section paper" id="projects">
+  <div class="sticky-left" style="background:var(--paper);border-right-color:rgba(191,122,40,.18);">
+    <div class="sl-num">03</div>
+    <div class="sl-title">Pro<br/>jets</div>
+    <div class="sl-verse">— chaque projet est une lettre envoyée au futur —</div>
+  </div>
+  <div class="sticky-right" style="background:var(--paper);">
+
+    <div class="proj r d1">
+      <div class="proj-head">
+        <div class="proj-meta"><span class="p-num">001</span><span class="p-badge">App Web</span></div>
+        <div class="p-btns"><a href="#" class="p-btn hi">Voir ↗</a><a href="#" class="p-btn">GitHub</a></div>
+      </div>
+      <div class="p-title">Nom du Projet 1</div>
+      <div class="p-desc">Application web qui résout un problème réel. Architecture choisie, contraintes surmontées, ce que ce projet dit de votre façon de concevoir.</div>
+      <div class="p-tags"><span class="ptag">PHP</span><span class="ptag">Symfony</span><span class="ptag">MySQL</span></div>
+    </div>
+
+    <div class="proj r d1">
+      <div class="proj-head">
+        <div class="proj-meta"><span class="p-num">002</span><span class="p-badge">Interface & API</span></div>
+        <div class="p-btns"><a href="#" class="p-btn hi">Voir ↗</a><a href="#" class="p-btn">GitHub</a></div>
+      </div>
+      <div class="p-title">Nom du Projet 2</div>
+      <div class="p-desc">Projet en équipe. Rôle précis, défis techniques, résultat livré. Ce qui rend ce projet représentatif de vos capacités réelles.</div>
+      <div class="p-tags"><span class="ptag">React</span><span class="ptag">Node.js</span><span class="ptag">REST API</span></div>
+    </div>
+
+    <div class="proj r d1">
+      <div class="proj-head">
+        <div class="proj-meta"><span class="p-num">003</span><span class="p-badge">Projet perso</span></div>
+        <div class="p-btns"><a href="#" class="p-btn hi">Voir ↗</a><a href="#" class="p-btn">GitHub</a></div>
+      </div>
+      <div class="p-title">Nom du Projet 3</div>
+      <div class="p-desc">Ce qui vous a poussé à le créer, les choix techniques, l'impact concret pour ses utilisateurs.</div>
+      <div class="p-tags"><span class="ptag">Python</span><span class="ptag">SQL</span><span class="ptag">Git</span></div>
+    </div>
+
+    <div class="proj r d1">
+      <div class="proj-head">
+        <div class="proj-meta"><span class="p-num">004</span><span class="p-badge">Stage — E6</span></div>
+        <div class="p-btns"><a href="#" class="p-btn hi">Dossier ↗</a></div>
+      </div>
+      <div class="p-title">Projet de Stage</div>
+      <div class="p-desc">Contexte, mission principale, ce que vous avez livré. Premier terrain professionnel réel.</div>
+      <div class="p-tags"><span class="ptag">Stack utilisée</span><span class="ptag">Env. pro</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ FORMATION ══ -->
+<div class="sticky-section dark" id="formation">
+  <div class="sticky-left">
+    <div class="sl-num">04</div>
+    <div class="sl-title">Par<br/>cours</div>
+    <div class="sl-verse">— les racines d'abord, les branches ensuite —</div>
+  </div>
+  <div class="sticky-right">
+
+    <div class="fe r d1">
+      <div class="fe-head"><div class="fe-title">BTS SIO — Option SLAM</div><div class="fe-yr">2023 — 2025</div></div>
+      <div class="fe-where">Nom de l'établissement · Ville</div>
+      <div class="fe-body">Développement d'applications, bases de données, architecture logicielle, gestion de projets. Épreuves E4 et E6.</div>
+    </div>
+
+    <div class="fe r d2">
+      <div class="fe-head"><div class="fe-title">Baccalauréat</div><div class="fe-yr">2021 — 2023</div></div>
+      <div class="fe-where">Lycée · Ville · Mention si applicable</div>
+      <div class="fe-body">Spécialité NSI ou autre. Point de départ d'une vocation qui ne s'est pas démentie depuis.</div>
+    </div>
+
+    <div class="fe r d3">
+      <div class="fe-head"><div class="fe-title">Apprentissage autodidacte</div><div class="fe-yr">En continu</div></div>
+      <div class="fe-where">Veille · Projets personnels · Cours en ligne</div>
+      <div class="fe-body">Un développeur qui s'arrête d'apprendre est un développeur qui recule.</div>
+    </div>
+
+    <div class="stage-box r">
+      <div class="sb-lbl">// Expérience pro</div>
+      <div class="sb-title">Stage — Nom de l'entreprise</div>
+      <div class="sb-body">Contexte, secteur, durée. Mission principale. Ce que vous avez développé, les problèmes résolus, comment vous vous êtes intégré dans l'équipe.</div>
+      <div class="sb-tags"><span class="sb-tag">Stack</span><span class="sb-tag">Méthodo</span><span class="sb-tag">Env. pro</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ CONTACT ══ -->
+<div class="sticky-section" id="contact">
+  <div class="sticky-left">
+    <div class="sl-num">05</div>
+    <div class="sl-title">Con<br/>tact</div>
+    <div class="sl-verse">— écrire à quelqu'un qu'on ne connaît pas encore —</div>
+  </div>
+  <div class="sticky-right">
+
+    <div class="c-big r d1">
+      Construisons<br/>
+      <span>quelque chose</span><br/>
+      qui vaut<br/>la peine d'être vécu.
+    </div>
+    <div class="c-note r d2">
+      Disponible pour un stage ou une alternance en 2025. Je réponds vite. Parlons de ce que vous construisez.
+    </div>
+    <div class="clinks r d3">
+      <a href="mailto:votre@email.com" class="clink">
+        <div class="cl-l"><span class="cl-lbl">Email</span><span class="cl-val">votre@email.com</span></div>
+        <span class="cl-arr">→</span>
+      </a>
+      <a href="https://github.com/votre-github" target="_blank" class="clink">
+        <div class="cl-l"><span class="cl-lbl">GitHub</span><span class="cl-val">github.com/votre-pseudo</span></div>
+        <span class="cl-arr">↗</span>
+      </a>
+      <a href="https://linkedin.com/in/votre-linkedin" target="_blank" class="clink">
+        <div class="cl-l"><span class="cl-lbl">LinkedIn</span><span class="cl-val">linkedin / votre-profil</span></div>
+        <span class="cl-arr">↗</span>
+      </a>
+      <a href="#" class="clink">
+        <div class="cl-l"><span class="cl-lbl">CV</span><span class="cl-val">Télécharger mon curriculum vitae</span></div>
+        <span class="cl-arr">↓ PDF</span>
+      </a>
+    </div>
+    <div class="c-foot r">
+      <span class="cf-c">© 2025 — Prénom Nom — BTS SIO SLAM</span>
+      <span class="cf-m">Fait avec soin, sans template.</span>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// Skill bars
+const skObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.querySelectorAll('.sk-fill').forEach((f, i) => {
+      setTimeout(() => { f.style.width = (parseFloat(f.dataset.w)*100)+'%'; f.classList.add('on'); }, i*60);
+    });
+    skObs.unobserve(e.target);
+  });
+}, { threshold: .15 });
+document.querySelectorAll('.sk-group').forEach(g => skObs.observe(g));
+
+// Reveal
+const rObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+}, { threshold: .07 });
+document.querySelectorAll('.r').forEach(el => rObs.observe(el));
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (!t) return; e.preventDefault();
+    t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
