@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Inkwell — Détail du projet</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Nunito:wght@300;400;600;700&family=Fira+Code:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#faf6ee;--card:#ffffff;--marigold:#c8860a;--gold:#a0620a;
+  --rose:#c0334d;--fuchsia:#9b1f50;--teal:#1a7a72;--ink:#1a1b2e;
+  --cream:#2a1f0e;--muted:#7a6650;--border:rgba(180,120,20,.18);
+  --surface:#fff8ee;--f1:'Nunito',sans-serif;--f2:'Fira Code',monospace;
+  --f3:'Playfair Display',serif;--radius:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--f1);background:var(--bg);color:var(--cream);line-height:1.7;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");opacity:.5;}
+nav{position:sticky;top:0;background:rgba(250,246,238,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;gap:1rem;z-index:100;}
+.nav-back{text-decoration:none;color:var(--marigold);font-weight:700;font-size:.85rem;display:flex;align-items:center;gap:.4rem;transition:.2s;}
+.nav-back:hover{color:var(--gold);transform:translateX(-3px);}
+.nav-sep{color:var(--border);}
+.nav-title{font-family:var(--f3);font-style:italic;color:var(--muted);font-size:.9rem;}
+.hero{max-width:1000px;margin:0 auto;padding:4.5rem 2rem 2.5rem;display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:start;}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(200,134,10,.08);border:1px solid rgba(200,134,10,.25);border-radius:100px;padding:.32rem 1rem;font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:1.3rem;width:fit-content;}
+.hero h1{font-family:var(--f3);font-size:clamp(2.6rem,5vw,4.8rem);font-weight:900;line-height:.98;margin-bottom:.7rem;}
+.hero h1 em{font-style:italic;background:linear-gradient(135deg,var(--marigold),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-desc{color:var(--muted);font-size:1rem;font-weight:300;max-width:530px;margin-bottom:1.6rem;line-height:1.78;}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.9rem;}
+.tag{display:inline-block;background:rgba(192,51,77,.09);border:1px solid rgba(192,51,77,.2);color:var(--rose);padding:.22rem .78rem;border-radius:100px;font-size:.72rem;font-weight:700;}
+.tag.blue{background:rgba(26,122,114,.09);border-color:rgba(26,122,114,.25);color:var(--teal);}
+.tag.gold{background:rgba(200,134,10,.09);border-color:rgba(200,134,10,.28);color:var(--gold);}
+.tag.ink{background:rgba(26,27,46,.09);border-color:rgba(26,27,46,.2);color:var(--ink);}
+.hero-links{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:.3rem;}
+.btn-primary{background:linear-gradient(135deg,var(--marigold),var(--fuchsia));color:#fff;border:none;padding:.78rem 1.9rem;border-radius:100px;font-family:var(--f1);font-weight:700;font-size:.85rem;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:transform .3s,box-shadow .3s;box-shadow:0 8px 28px rgba(200,134,10,.26);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(200,134,10,.42);}
+.btn-ghost{background:transparent;color:var(--gold);border:1px solid rgba(200,134,10,.4);padding:.78rem 1.9rem;border-radius:100px;font-family:var(--f1);font-weight:700;font-size:.85rem;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:all .3s;}
+.btn-ghost:hover{background:rgba(200,134,10,.08);}
+.hero-stats{display:flex;flex-direction:column;gap:.8rem;min-width:165px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.05);transition:border-color .3s,transform .3s;}
+.stat-card:hover{border-color:rgba(200,134,10,.3);transform:translateY(-2px);}
+.stat-card .num{font-family:var(--f3);font-size:2rem;background:linear-gradient(135deg,var(--marigold),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;line-height:1.1;}
+.stat-card .lbl{font-size:.68rem;color:var(--muted);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-top:.1rem;}
+.container{max-width:1000px;margin:0 auto;padding:0 2rem 5rem;}
+.sep{display:flex;align-items:center;gap:1.5rem;max-width:1000px;margin:0 auto;padding:0 2rem;}
+.sep::before,.sep::after{content:'';flex:1;height:1px;background:var(--border);}
+.sep span{color:var(--marigold);font-size:.85rem;white-space:nowrap;}
+.section{padding:3.2rem 0;}
+.section-label{font-size:.68rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--marigold);margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem;}
+.section-label::before{content:'';display:block;width:22px;height:1px;background:var(--marigold);}
+.section-title{font-family:var(--f3);font-size:1.75rem;font-weight:700;color:var(--cream);margin-bottom:1.6rem;}
+.section-title em{font-style:italic;color:var(--gold);}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.6rem;transition:border-color .3s,box-shadow .3s,transform .3s;}
+.feat-card:hover{border-color:rgba(200,134,10,.3);box-shadow:0 12px 36px rgba(180,120,20,.1);transform:translateY(-3px);}
+.feat-icon{font-size:1.7rem;margin-bottom:.8rem;display:block;}
+.feat-title{font-family:var(--f3);font-size:1rem;font-style:italic;color:var(--gold);margin-bottom:.65rem;}
+.feat-list{list-style:none;}
+.feat-list li{font-size:.85rem;color:var(--muted);padding:.27rem 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:.5rem;}
+.feat-list li:last-child{border-bottom:none;}
+.feat-list li::before{content:'→';color:var(--marigold);font-size:.74rem;flex-shrink:0;margin-top:.25rem;}
+.feature-highlight{background:linear-gradient(135deg,rgba(200,134,10,.05),rgba(192,51,77,.04));border:1px solid rgba(200,134,10,.18);border-radius:var(--radius);padding:1.5rem 1.6rem;display:flex;gap:1.1rem;align-items:flex-start;margin-bottom:.85rem;transition:border-color .3s,transform .3s;}
+.feature-highlight:hover{border-color:rgba(200,134,10,.32);transform:translateX(3px);}
+.fh-icon{font-size:1.5rem;flex-shrink:0;margin-top:.05rem;}
+.fh-title{font-weight:700;font-size:.92rem;color:var(--cream);margin-bottom:.22rem;}
+.fh-desc{font-size:.83rem;color:var(--muted);line-height:1.65;}
+.skill-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.95rem 1.15rem;margin-bottom:.65rem;}
+.skill-row-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;}
+.skill-name{font-weight:700;font-size:.88rem;}
+.skill-pct{font-size:.75rem;color:var(--marigold);font-weight:700;}
+.skill-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.skill-fill{height:100%;background:linear-gradient(to right,var(--marigold),var(--rose));border-radius:2px;width:0;transition:width 1.25s cubic-bezier(.4,0,.2,1);}
+.tech-grid{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem;}
+.tech-pill{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.5rem 1.05rem;font-size:.78rem;font-weight:600;color:var(--cream);display:flex;align-items:center;gap:.4rem;transition:.2s;}
+.tech-pill:hover{border-color:var(--marigold);color:var(--gold);}
+.apercu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;margin-top:1rem;}
+.apercu-item{border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--surface);}
+.apercu-item img{width:100%;height:220px;object-fit:cover;object-position:top;cursor:pointer;display:block;transition:.3s;}
+.apercu-item img:hover{opacity:.84;transform:scale(1.025);}
+.apercu-item figcaption{padding:.5rem .85rem;font-size:.74rem;color:var(--marigold);font-weight:700;text-align:center;}
+.lightbox-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.87);z-index:9999;align-items:center;justify-content:center;}
+.lightbox-overlay.active{display:flex;}
+.lightbox-inner{position:relative;max-width:90vw;max-height:90vh;border-radius:16px;overflow:hidden;}
+.lightbox-inner img{width:100%;max-height:90vh;object-fit:contain;display:block;}
+.lightbox-close{position:absolute;top:.6rem;right:.9rem;background:rgba(0,0,0,.55);border:none;border-radius:50%;width:2.2rem;height:2.2rem;color:#fff;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.r{opacity:0;transform:translateY(22px);transition:.62s ease;}
+.r.on{opacity:1;transform:none;}
+.r.d1{transition-delay:.08s;}.r.d2{transition-delay:.16s;}.r.d3{transition-delay:.24s;}
+
+/* ═══ COMPOSANT RÉUTILISABLE — .structure-mvc ═══ */
+.structure-mvc{display:flex;flex-direction:column;gap:.55rem;}
+.layer{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--card);transition:border-color .25s,box-shadow .25s;}
+.layer:hover{border-color:rgba(200,134,10,.28);}
+.layer.open{border-color:rgba(200,134,10,.38);box-shadow:0 6px 24px rgba(180,120,20,.08);}
+.layer-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.35rem;cursor:pointer;user-select:none;gap:1rem;transition:background .2s;}
+.layer-header:hover{background:rgba(200,134,10,.03);}
+.layer.open .layer-header{background:linear-gradient(135deg,rgba(200,134,10,.055),rgba(192,51,77,.025));}
+.layer-left{display:flex;align-items:center;gap:.95rem;}
+.layer-icon{font-size:1.25rem;flex-shrink:0;width:2rem;text-align:center;}
+.layer-path{display:block;font-family:var(--f2);font-size:.81rem;color:var(--cream);font-weight:600;margin-bottom:.08rem;}
+.layer-desc{display:block;font-size:.74rem;color:var(--muted);}
+.layer-meta{display:flex;align-items:center;gap:.75rem;flex-shrink:0;}
+.layer-badge{background:rgba(200,134,10,.1);border:1px solid rgba(200,134,10,.22);color:var(--gold);font-size:.67rem;font-weight:700;padding:.2rem .72rem;border-radius:100px;white-space:nowrap;}
+.layer-chevron{font-size:.72rem;color:var(--muted);transition:transform .3s cubic-bezier(.4,0,.2,1);flex-shrink:0;}
+.layer.open .layer-chevron{transform:rotate(180deg);}
+.layer-body{max-height:0;overflow:hidden;transition:max-height .38s cubic-bezier(.4,0,.2,1);border-top:1px solid transparent;}
+.layer.open .layer-body{max-height:1400px;border-top-color:var(--border);}
+.layer-group{padding:.85rem 1.35rem 0;}
+.layer-group:last-child{padding-bottom:.85rem;}
+.layer-group-title{font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--marigold);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.layer-group-title::before{content:'';display:block;width:12px;height:1px;background:var(--marigold);}
+.layer-files{display:flex;flex-direction:column;gap:.18rem;}
+.layer-body>.layer-files{padding:.85rem 1.35rem;}
+.lf{display:flex;align-items:baseline;justify-content:space-between;gap:1.2rem;padding:.38rem .7rem;border-radius:8px;transition:background .16s;}
+.lf:hover{background:var(--surface);}
+.lf-name{font-family:var(--f2);font-size:.77rem;color:var(--cream);flex-shrink:0;}
+.lf-note{font-size:.74rem;color:var(--muted);text-align:right;line-height:1.35;}
+/* ═══════════════════════════════════════════════ */
+
+@media(max-width:720px){
+  .hero{grid-template-columns:1fr;}
+  .hero-stats{flex-direction:row;flex-wrap:wrap;}
+  .stat-card{flex:1;min-width:110px;}
+  .grid-2,.grid-3{grid-template-columns:1fr;}
+  .lf{flex-direction:column;gap:.1rem;}
+  .lf-note{text-align:left;}
+}
+</style>
+</head>
+<body>
+
+<div class="lightbox-overlay" id="lightbox">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" id="lb-close">✕</button>
+    <img src="" id="lb-img" alt=""/>
+  </div>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-back">← Portfolio</a>
+  <span class="nav-sep">/</span>
+  <span class="nav-title">Inkwell</span>
+</nav>
+
+<div class="hero">
+  <div>
+    <div class="hero-badge">✦ Projet 03 — BTS SIO SLAM</div>
+    <h1>Ink<em>well</em></h1>
+    <p class="hero-desc">Application web de gestion de projets littéraires — écriture, lecture immersive et organisation des histoires par chapitres. Inspirée de Wattpad, construite avec Laravel.</p>
+    <div class="tags">
+      <span class="tag">Laravel</span><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">HTML/CSS</span>
+      <span class="tag blue">Blade Templates</span><span class="tag blue">Eloquent ORM</span>
+      <span class="tag gold">Éditeur riche</span><span class="tag gold">Mode lecture</span>
+    </div>
+    <div class="hero-links">
+      <a href="https://github.com/Neema253" target="_blank" class="btn-primary">🐙 GitHub ↗</a>
+      <a href="#fonctionnalites" class="btn-ghost">✨ Fonctionnalités</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card"><span class="num">9</span><span class="lbl">Vues Blade</span></div>
+    <div class="stat-card"><span class="num">2</span><span class="lbl">Contrôleurs</span></div>
+    <div class="stat-card"><span class="num">2</span><span class="lbl">Modèles</span></div>
+    <div class="stat-card"><span class="num">∞</span><span class="lbl">Histoires</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section r">
+    <div class="section-label">Contexte</div>
+    <h2 class="section-title">Une plateforme <em>d'écriture.</em></h2>
+    <div class="grid-2">
+      <div class="feat-card r d1">
+        <span class="feat-icon">📖</span>
+        <p class="feat-title">L'idée du projet</p>
+        <ul class="feat-list">
+          <li>Application inspirée de Wattpad</li>
+          <li>Chaque auteur gère sa bibliothèque privée</li>
+          <li>Les histoires sont découpées en chapitres ordonnés</li>
+          <li>Navigation fluide précédent / suivant entre chapitres</li>
+          <li>Expérience de lecture immersive style e-reader</li>
+          <li>Authentification Laravel Breeze requise</li>
+        </ul>
+      </div>
+      <div class="feat-card r d2">
+        <span class="feat-icon">🏗️</span>
+        <p class="feat-title">Architecture MVC</p>
+        <ul class="feat-list">
+          <li><strong style="color:var(--cream)">StoryController</strong> — CRUD histoires + lecture</li>
+          <li><strong style="color:var(--cream)">ChapterController</strong> — CRUD chapitres imbriqués</li>
+          <li>Routes protégées par middleware <code style="font-size:.75rem;color:var(--marigold)">auth</code></li>
+          <li>Relations Eloquent : Story hasMany Chapter</li>
+          <li>Stockage des couvertures via <code style="font-size:.75rem;color:var(--marigold)">storage:link</code></li>
+          <li>Validation serveur sur tous les formulaires</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <!-- ARCHITECTURE — COMPOSANT RÉUTILISABLE -->
+  <div class="section r">
+    <div class="section-label">Architecture</div>
+    <h2 class="section-title">Structure <em>du projet.</em></h2>
+
+    <div class="structure-mvc r d1">
+
+      <!-- Vues -->
+      <div class="layer open">
+        <div class="layer-header" onclick="toggleLayer(this)">
+          <div class="layer-left">
+            <span class="layer-icon">🖼️</span>
+            <div>
+              <span class="layer-path">resources/views/</span>
+              <span class="layer-desc">Templates Blade — interface utilisateur</span>
+            </div>
+          </div>
+          <div class="layer-meta"><span class="layer-badge">9 vues</span><span class="layer-chevron">▾</span></div>
+        </div>
+        <div class="layer-body">
+          <div class="layer-group">
+            <div class="layer-group-title">📐 layouts/</div>
+            <div class="layer-files">
+              <div class="lf"><span class="lf-name">app.blade.php</span><span class="lf-note">Layout principal · navbar · flash messages · styles globaux</span></div>
+            </div>
+          </div>
+          <div class="layer-group">
+            <div class="layer-group-title">📚 stories/</div>
+            <div class="layer-files">
+              <div class="lf"><span class="lf-name">index.blade.php</span><span class="lf-note">Bibliothèque · liste des histoires · stats</span></div>
+              <div class="lf"><span class="lf-name">create.blade.php</span><span class="lf-note">Formulaire création + aperçu couverture</span></div>
+              <div class="lf"><span class="lf-name">edit.blade.php</span><span class="lf-note">Formulaire modification</span></div>
+              <div class="lf"><span class="lf-name">show.blade.php</span><span class="lf-note">Espace d'écriture · sidebar + liste chapitres</span></div>
+              <div class="lf"><span class="lf-name">read.blade.php</span><span class="lf-note">Lecture immersive (1er chapitre)</span></div>
+            </div>
+          </div>
+          <div class="layer-group">
+            <div class="layer-group-title">✍️ chapters/</div>
+            <div class="layer-files">
+              <div class="lf"><span class="lf-name">create.blade.php</span><span class="lf-note">Éditeur nouveau chapitre · toolbar · auto-save</span></div>
+              <div class="lf"><span class="lf-name">edit.blade.php</span><span class="lf-note">Éditeur modification · Ctrl+S · plein écran</span></div>
+              <div class="lf"><span class="lf-name">show.blade.php</span><span class="lf-note">Lecture chapitre · navigation · ToC · progress bar</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controllers -->
+      <div class="layer">
+        <div class="layer-header" onclick="toggleLayer(this)">
+          <div class="layer-left">
+            <span class="layer-icon">⚙️</span>
+            <div>
+              <span class="layer-path">app/Http/Controllers/</span>
+              <span class="layer-desc">Logique métier — traitement des requêtes HTTP</span>
+            </div>
+          </div>
+          <div class="layer-meta"><span class="layer-badge">2 controllers</span><span class="layer-chevron">▾</span></div>
+        </div>
+        <div class="layer-body">
+          <div class="layer-files">
+            <div class="lf"><span class="lf-name">StoryController.php</span><span class="lf-note">index · create · store · show · edit · update · read · destroy</span></div>
+            <div class="lf"><span class="lf-name">ChapterController.php</span><span class="lf-note">create · store · show · edit · update · destroy</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Models -->
+      <div class="layer">
+        <div class="layer-header" onclick="toggleLayer(this)">
+          <div class="layer-left">
+            <span class="layer-icon">🗂️</span>
+            <div>
+              <span class="layer-path">app/Models/</span>
+              <span class="layer-desc">Relations Eloquent — accès aux données</span>
+            </div>
+          </div>
+          <div class="layer-meta"><span class="layer-badge">2 modèles</span><span class="layer-chevron">▾</span></div>
+        </div>
+        <div class="layer-body">
+          <div class="layer-files">
+            <div class="lf"><span class="lf-name">Story.php</span><span class="lf-note">fillable: title · description · cover · user_id · hasMany Chapter</span></div>
+            <div class="lf"><span class="lf-name">Chapter.php</span><span class="lf-note">fillable: title · content · order · story_id · belongsTo Story</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Routes + DB -->
+      <div class="layer">
+        <div class="layer-header" onclick="toggleLayer(this)">
+          <div class="layer-left">
+            <span class="layer-icon">🗄️</span>
+            <div>
+              <span class="layer-path">routes/ &amp; database/</span>
+              <span class="layer-desc">Routage REST · migrations · stockage couvertures</span>
+            </div>
+          </div>
+          <div class="layer-meta"><span class="layer-badge">2 migrations · 1 route custom</span><span class="layer-chevron">▾</span></div>
+        </div>
+        <div class="layer-body">
+          <div class="layer-group">
+            <div class="layer-group-title">🛣️ routes/</div>
+            <div class="layer-files">
+              <div class="lf"><span class="lf-name">web.php</span><span class="lf-note">Resource routes stories + chapters · stories/{story}/read</span></div>
+            </div>
+          </div>
+          <div class="layer-group">
+            <div class="layer-group-title">📋 migrations/</div>
+            <div class="layer-files">
+              <div class="lf"><span class="lf-name">create_stories_table.php</span><span class="lf-note">title · description · cover · user_id · timestamps</span></div>
+              <div class="lf"><span class="lf-name">create_chapters_table.php</span><span class="lf-note">title · content · order · story_id · timestamps</span></div>
+            </div>
+          </div>
+          <div class="layer-group">
+            <div class="layer-group-title">🖼️ storage/</div>
+            <div class="layer-files">
+              <div class="lf"><span class="lf-name">storage/app/public/covers/</span><span class="lf-note">Couvertures uploadées · lien via php artisan storage:link</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /structure-mvc -->
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <div class="section r" id="fonctionnalites">
+    <div class="section-label">Fonctionnalités</div>
+    <h2 class="section-title">Ce que fait <em>Inkwell.</em></h2>
+    <div class="grid-3 r">
+      <div class="feat-card d1"><span class="feat-icon">📚</span><p class="feat-title">Bibliothèque</p><ul class="feat-list"><li>Liste des histoires de l'auteur connecté</li><li>Stats : nb histoires, nb chapitres total</li><li>Couverture personnalisée (upload image)</li><li>Date de modification relative</li><li>Boutons Lire / Écrire / Modifier / Supprimer</li><li>État vide avec call-to-action</li></ul></div>
+      <div class="feat-card d2"><span class="feat-icon">✍️</span><p class="feat-title">Éditeur</p><ul class="feat-list"><li>Toolbar : Gras, Italique, Souligné, H1, H2</li><li>Insertion citation (❝) et séparateur (—)</li><li>Compteur de mots en temps réel</li><li>Auto-save brouillon (localStorage, 30s)</li><li>Restauration du brouillon au rechargement</li><li>Mode plein écran + raccourci Ctrl+S</li></ul></div>
+      <div class="feat-card d3"><span class="feat-icon">🌙</span><p class="feat-title">Lecture immersive</p><ul class="feat-list"><li>Barre de progression de lecture (scroll)</li><li>Table des matières fixe en sidebar</li><li>Navigation précédent / suivant par chapitre</li><li>Réglage taille de police (A- / A+)</li><li>Bascule Serif / Sans-serif</li><li>Thème clair / sombre (toggle)</li></ul></div>
+      <div class="feat-card d1"><span class="feat-icon">🔐</span><p class="feat-title">Sécurité</p><ul class="feat-list"><li>Toutes les routes protégées par <code style="font-size:.75rem;color:var(--marigold)">auth</code></li><li>Cloisonnement : chaque auteur voit uniquement ses histoires</li><li><code style="font-size:.75rem;color:var(--marigold)">abort(403)</code> si accès à une histoire étrangère</li><li>Validation CSRF sur tous les formulaires</li><li>Validation serveur (title required, cover max 2Mo)</li></ul></div>
+      <div class="feat-card d2"><span class="feat-icon">🗄️</span><p class="feat-title">Base de données</p><ul class="feat-list"><li>Table <code style="font-size:.75rem;color:var(--marigold)">stories</code> : title, description, cover, user_id</li><li>Table <code style="font-size:.75rem;color:var(--marigold)">chapters</code> : title, content, order, story_id</li><li>Relation <code style="font-size:.75rem;color:var(--marigold)">hasMany</code> / <code style="font-size:.75rem;color:var(--marigold)">belongsTo</code></li><li>Ordre des chapitres géré automatiquement</li><li>Migrations versionnées</li></ul></div>
+      <div class="feat-card d3"><span class="feat-icon">🎨</span><p class="feat-title">UX / Design</p><ul class="feat-list"><li>Thème sombre raffiné (noir profond + rouge + doré)</li><li>Animations fadeUp sur les cartes</li><li>Barre sticky navbar avec blur</li><li>Flash messages (succès / erreur)</li><li>Aperçu couverture avant upload</li><li>Design mobile responsive</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <div class="section r">
+    <div class="section-label">Points clés</div>
+    <h2 class="section-title">Quelques <em>exemples.</em></h2>
+    <div class="grid-2 r d1">
+      <div class="feature-highlight"><span class="fh-icon">💾</span><div><div class="fh-title">Auto-save brouillon</div><div class="fh-desc">L'éditeur sauvegarde automatiquement toutes les 30 secondes dans le localStorage. Au rechargement, il propose de restaurer le brouillon non enregistré.</div></div></div>
+      <div class="feature-highlight"><span class="fh-icon">📊</span><div><div class="fh-title">Barre de progression de lecture</div><div class="fh-desc">En mode lecture, une barre rouge en haut de page indique l'avancement dans le chapitre au fil du scroll.</div></div></div>
+      <div class="feature-highlight"><span class="fh-icon">🔐</span><div><div class="fh-title">Cloisonnement par auteur</div><div class="fh-desc">Chaque utilisateur n'accède qu'à ses propres histoires. Toute tentative d'accès à une histoire étrangère retourne un <code style="font-size:.75rem;color:var(--marigold)">403 Forbidden</code>.</div></div></div>
+      <div class="feature-highlight"><span class="fh-icon">🌙</span><div><div class="fh-title">Réglages de lecture</div><div class="fh-desc">Le lecteur peut ajuster la taille de police, basculer entre Serif et Sans-serif, et switcher entre thème clair et sombre.</div></div></div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <div class="section r">
+    <div class="section-label">Compétences mobilisées</div>
+    <h2 class="section-title">Ce que j'ai <em>appris.</em></h2>
+    <div class="grid-2 r">
+      <div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Laravel / PHP</span><span class="skill-pct">88%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".88"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Blade Templates</span><span class="skill-pct">85%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".85"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">SQL / Eloquent ORM</span><span class="skill-pct">82%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".82"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">HTML / CSS</span><span class="skill-pct">90%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".90"></div></div></div>
+      </div>
+      <div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">JavaScript (DOM, localStorage)</span><span class="skill-pct">72%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".72"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Architecture MVC</span><span class="skill-pct">85%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".85"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">UX / Design UI</span><span class="skill-pct">78%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".78"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Gestion de fichiers (Storage)</span><span class="skill-pct">75%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".75"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <div class="section r">
+    <div class="section-label">Stack technique</div>
+    <h2 class="section-title">Les <em>technologies</em> utilisées.</h2>
+    <div class="tech-grid r d1">
+      <div class="tech-pill"><span>🟠</span> Laravel 10+</div><div class="tech-pill"><span>🐘</span> PHP 8</div>
+      <div class="tech-pill"><span>🗄️</span> MySQL</div><div class="tech-pill"><span>🌿</span> Blade Templates</div>
+      <div class="tech-pill"><span>📦</span> Eloquent ORM</div><div class="tech-pill"><span>🔐</span> Laravel Breeze</div>
+      <div class="tech-pill"><span>💾</span> localStorage (auto-save)</div><div class="tech-pill"><span>🖼️</span> Storage (couvertures)</div>
+      <div class="tech-pill"><span>🎨</span> CSS custom (dark theme)</div><div class="tech-pill"><span>⚡</span> JavaScript vanilla</div>
+      <div class="tech-pill"><span>🐙</span> Git / GitHub</div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <div class="section r">
+    <div class="section-label">Aperçus</div>
+    <h2 class="section-title">Aperçus <em>du projet.</em></h2>
+    <div class="apercu-grid">
+      <figure class="apercu-item r d1"><img src="img/inkwell-sreen 1.png" alt="Mes histoires" title="Cliquer pour agrandir"/><figcaption>Bibliothèque — Mes histoires</figcaption></figure>
+      <figure class="apercu-item r d2"><img src="img/inkwell-sreen 2.png" alt="Nouvelle Histoire" title="Cliquer pour agrandir"/><figcaption>Créer une nouvelle histoire</figcaption></figure>
+      <figure class="apercu-item r d3"><img src="img/inkwell-sreen 3.png" alt="Lecture chapitre" title="Cliquer pour agrandir"/><figcaption>Lecture immersive d'un chapitre</figcaption></figure>
+      <figure class="apercu-item r d1"><img src="img/inkwell-screen 4.png" alt="Ajout chapitre" title="Cliquer pour agrandir"/><figcaption>Éditeur — Ajout de chapitre</figcaption></figure>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const overlay=document.getElementById('lightbox'),lbImg=document.getElementById('lb-img'),lbClose=document.getElementById('lb-close');
+document.querySelectorAll('.apercu-item img').forEach(img=>{img.addEventListener('click',()=>{lbImg.src=img.src;overlay.classList.add('active');});});
+lbClose.addEventListener('click',()=>overlay.classList.remove('active'));
+overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.classList.remove('active');});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')overlay.classList.remove('active');});
+function toggleLayer(h){h.closest('.layer').classList.toggle('open');}
+const skObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(!e.isIntersecting)return;e.target.querySelectorAll('.skill-fill').forEach(f=>{f.style.width=(parseFloat(f.dataset.w)*100)+'%';});skObs.unobserve(e.target);});},{threshold:.3});
+document.querySelectorAll('.grid-2').forEach(el=>skObs.observe(el));
+const rObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});},{threshold:.08});
+document.querySelectorAll('.r').forEach(el=>rObs.observe(el));
+</script>
+</body>
+</html>

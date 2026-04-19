@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Heberge4 — Détail du projet</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Nunito:wght@300;400;600;700&family=Fira+Code:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#faf6ee;--card:#ffffff;--marigold:#c8860a;--gold:#a0620a;
+  --rose:#c0334d;--fuchsia:#9b1f50;--teal:#1a7a72;--ink:#1a1b2e;
+  --cream:#2a1f0e;--muted:#7a6650;--border:rgba(180,120,20,.18);
+  --surface:#fff8ee;--f1:'Nunito',sans-serif;--f2:'Fira Code',monospace;
+  --f3:'Playfair Display',serif;--radius:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--f1);background:var(--bg);color:var(--cream);line-height:1.7;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");opacity:.5;}
+nav{position:sticky;top:0;background:rgba(250,246,238,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;gap:1rem;z-index:100;}
+.nav-back{text-decoration:none;color:var(--marigold);font-weight:700;font-size:.85rem;display:flex;align-items:center;gap:.4rem;transition:.2s;}
+.nav-back:hover{color:var(--gold);transform:translateX(-3px);}
+.nav-sep{color:var(--border);}
+.nav-title{font-family:var(--f3);font-style:italic;color:var(--muted);font-size:.9rem;}
+.hero{max-width:1000px;margin:0 auto;padding:4.5rem 2rem 2.5rem;display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:start;}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(200,134,10,.08);border:1px solid rgba(200,134,10,.25);border-radius:100px;padding:.32rem 1rem;font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:1.3rem;width:fit-content;}
+.hero h1{font-family:var(--f3);font-size:clamp(2.6rem,5vw,4.8rem);font-weight:900;line-height:.98;margin-bottom:.7rem;}
+.hero h1 em{font-style:italic;background:linear-gradient(135deg,var(--marigold),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-desc{color:var(--muted);font-size:1rem;font-weight:300;max-width:530px;margin-bottom:1.6rem;line-height:1.78;}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.9rem;}
+.tag{display:inline-block;background:rgba(192,51,77,.09);border:1px solid rgba(192,51,77,.2);color:var(--rose);padding:.22rem .78rem;border-radius:100px;font-size:.72rem;font-weight:700;}
+.tag.blue{background:rgba(26,122,114,.09);border-color:rgba(26,122,114,.25);color:var(--teal);}
+.tag.gold{background:rgba(200,134,10,.09);border-color:rgba(200,134,10,.28);color:var(--gold);}
+.tag.ink{background:rgba(26,27,46,.09);border-color:rgba(26,27,46,.2);color:var(--ink);}
+.hero-links{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:.3rem;}
+.btn-primary{background:linear-gradient(135deg,var(--marigold),var(--fuchsia));color:#fff;border:none;padding:.78rem 1.9rem;border-radius:100px;font-family:var(--f1);font-weight:700;font-size:.85rem;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:transform .3s,box-shadow .3s;box-shadow:0 8px 28px rgba(200,134,10,.26);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(200,134,10,.42);}
+.btn-ghost{background:transparent;color:var(--gold);border:1px solid rgba(200,134,10,.4);padding:.78rem 1.9rem;border-radius:100px;font-family:var(--f1);font-weight:700;font-size:.85rem;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:all .3s;}
+.btn-ghost:hover{background:rgba(200,134,10,.08);}
+.hero-stats{display:flex;flex-direction:column;gap:.8rem;min-width:165px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.05);transition:border-color .3s,transform .3s;}
+.stat-card:hover{border-color:rgba(200,134,10,.3);transform:translateY(-2px);}
+.stat-card .num{font-family:var(--f3);font-size:2rem;background:linear-gradient(135deg,var(--marigold),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;line-height:1.1;}
+.stat-card .lbl{font-size:.68rem;color:var(--muted);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-top:.1rem;}
+.container{max-width:1000px;margin:0 auto;padding:0 2rem 5rem;}
+.sep{display:flex;align-items:center;gap:1.5rem;max-width:1000px;margin:0 auto;padding:0 2rem;}
+.sep::before,.sep::after{content:'';flex:1;height:1px;background:var(--border);}
+.sep span{color:var(--marigold);font-size:.85rem;white-space:nowrap;}
+.section{padding:3.2rem 0;}
+.section-label{font-size:.68rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--marigold);margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem;}
+.section-label::before{content:'';display:block;width:22px;height:1px;background:var(--marigold);}
+.section-title{font-family:var(--f3);font-size:1.75rem;font-weight:700;color:var(--cream);margin-bottom:1.6rem;}
+.section-title em{font-style:italic;color:var(--gold);}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.6rem;transition:border-color .3s,box-shadow .3s,transform .3s;}
+.feat-card:hover{border-color:rgba(200,134,10,.3);box-shadow:0 12px 36px rgba(180,120,20,.1);transform:translateY(-3px);}
+.feat-icon{font-size:1.7rem;margin-bottom:.8rem;display:block;}
+.feat-title{font-family:var(--f3);font-size:1rem;font-style:italic;color:var(--gold);margin-bottom:.65rem;}
+.feat-list{list-style:none;}
+.feat-list li{font-size:.85rem;color:var(--muted);padding:.27rem 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:.5rem;}
+.feat-list li:last-child{border-bottom:none;}
+.feat-list li::before{content:'→';color:var(--marigold);font-size:.74rem;flex-shrink:0;margin-top:.25rem;}
+/* serveurs */
+.servers-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:1.5rem;}
+.server-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem;text-align:center;transition:border-color .3s,transform .3s;}
+.server-box:hover{border-color:rgba(200,134,10,.3);transform:translateY(-2px);}
+.server-icon{font-size:2rem;margin-bottom:.5rem;display:block;}
+.server-name{font-family:var(--f3);font-size:.95rem;font-weight:700;color:var(--cream);margin-bottom:.2rem;}
+.server-ip{font-family:var(--f2);font-size:.72rem;color:var(--marigold);margin-bottom:.6rem;}
+.server-services{list-style:none;}
+.server-services li{font-size:.75rem;color:var(--muted);padding:.18rem 0;border-bottom:1px solid rgba(180,120,20,.08);}
+.server-services li:last-child{border-bottom:none;}
+.network-arrow{display:flex;align-items:center;justify-content:center;gap:1rem;font-size:.78rem;color:var(--muted);font-family:var(--f2);}
+.arrow-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--marigold),transparent);}
+/* flow */
+.flow{display:flex;flex-direction:column;gap:.6rem;margin-top:1rem;}
+.flow-step{display:flex;align-items:flex-start;gap:1rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem;transition:border-color .3s;}
+.flow-step:hover{border-color:rgba(200,134,10,.3);}
+.flow-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--marigold),var(--rose));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;flex-shrink:0;font-family:var(--f2);}
+.flow-body h4{font-weight:700;font-size:.88rem;color:var(--cream);margin-bottom:.15rem;}
+.flow-body p{font-size:.8rem;color:var(--muted);}
+.flow-body code{font-family:var(--f2);font-size:.73rem;color:var(--marigold);background:rgba(200,134,10,.08);padding:.1rem .35rem;border-radius:4px;}
+.feature-highlight{background:linear-gradient(135deg,rgba(200,134,10,.05),rgba(192,51,77,.04));border:1px solid rgba(200,134,10,.18);border-radius:var(--radius);padding:1.5rem 1.6rem;display:flex;gap:1.1rem;align-items:flex-start;margin-bottom:.85rem;transition:border-color .3s,transform .3s;}
+.feature-highlight:hover{border-color:rgba(200,134,10,.32);transform:translateX(3px);}
+.fh-icon{font-size:1.5rem;flex-shrink:0;margin-top:.05rem;}
+.fh-title{font-weight:700;font-size:.92rem;color:var(--cream);margin-bottom:.22rem;}
+.fh-desc{font-size:.83rem;color:var(--muted);line-height:1.65;}
+.skill-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.95rem 1.15rem;margin-bottom:.65rem;}
+.skill-row-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;}
+.skill-name{font-weight:700;font-size:.88rem;}
+.skill-pct{font-size:.75rem;color:var(--marigold);font-weight:700;}
+.skill-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.skill-fill{height:100%;background:linear-gradient(to right,var(--marigold),var(--rose));border-radius:2px;width:0;transition:width 1.25s cubic-bezier(.4,0,.2,1);}
+.tech-grid{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem;}
+.tech-pill{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.5rem 1.05rem;font-size:.78rem;font-weight:600;color:var(--cream);display:flex;align-items:center;gap:.4rem;transition:.2s;}
+.tech-pill:hover{border-color:var(--marigold);color:var(--gold);}
+.apercu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;margin-top:1rem;}
+.apercu-item{border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--surface);}
+.apercu-item img{width:100%;height:220px;object-fit:cover;object-position:top;cursor:pointer;display:block;transition:.3s;}
+.apercu-item img:hover{opacity:.84;transform:scale(1.025);}
+.apercu-item figcaption{padding:.5rem .85rem;font-size:.74rem;color:var(--marigold);font-weight:700;text-align:center;}
+.lightbox-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.87);z-index:9999;align-items:center;justify-content:center;}
+.lightbox-overlay.active{display:flex;}
+.lightbox-inner{position:relative;max-width:90vw;max-height:90vh;border-radius:16px;overflow:hidden;}
+.lightbox-inner img{width:100%;max-height:90vh;object-fit:contain;display:block;}
+.lightbox-close{position:absolute;top:.6rem;right:.9rem;background:rgba(0,0,0,.55);border:none;border-radius:50%;width:2.2rem;height:2.2rem;color:#fff;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.r{opacity:0;transform:translateY(22px);transition:.62s ease;}
+.r.on{opacity:1;transform:none;}
+.r.d1{transition-delay:.08s;}.r.d2{transition-delay:.16s;}.r.d3{transition-delay:.24s;}
+
+/* ═══ COMPOSANT RÉUTILISABLE — .structure-mvc ═══ */
+.structure-mvc{display:flex;flex-direction:column;gap:.55rem;}
+.layer{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--card);transition:border-color .25s,box-shadow .25s;}
+.layer:hover{border-color:rgba(200,134,10,.28);}
+.layer.open{border-color:rgba(200,134,10,.38);box-shadow:0 6px 24px rgba(180,120,20,.08);}
+.layer-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.35rem;cursor:pointer;user-select:none;gap:1rem;transition:background .2s;}
+.layer-header:hover{background:rgba(200,134,10,.03);}
+.layer.open .layer-header{background:linear-gradient(135deg,rgba(200,134,10,.055),rgba(192,51,77,.025));}
+.layer-left{display:flex;align-items:center;gap:.95rem;}
+.layer-icon{font-size:1.25rem;flex-shrink:0;width:2rem;text-align:center;}
+.layer-path{display:block;font-family:var(--f2);font-size:.81rem;color:var(--cream);font-weight:600;margin-bottom:.08rem;}
+.layer-desc{display:block;font-size:.74rem;color:var(--muted);}
+.layer-meta{display:flex;align-items:center;gap:.75rem;flex-shrink:0;}
+.layer-badge{background:rgba(200,134,10,.1);border:1px solid rgba(200,134,10,.22);color:var(--gold);font-size:.67rem;font-weight:700;padding:.2rem .72rem;border-radius:100px;white-space:nowrap;}
+.layer-chevron{font-size:.72rem;color:var(--muted);transition:transform .3s cubic-bezier(.4,0,.2,1);flex-shrink:0;}
+.layer.open .layer-chevron{transform:rotate(180deg);}
+.layer-body{max-height:0;overflow:hidden;transition:max-height .38s cubic-bezier(.4,0,.2,1);border-top:1px solid transparent;}
+.layer.open .layer-body{max-height:1400px;border-top-color:var(--border);}
+.layer-group{padding:.85rem 1.35rem 0;}
+.layer-group:last-child{padding-bottom:.85rem;}
+.layer-group-title{font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--marigold);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.layer-group-title::before{content:'';display:block;width:12px;height:1px;background:var(--marigold);}
+.layer-files{display:flex;flex-direction:column;gap:.18rem;}
+.layer-body>.layer-files{padding:.85rem 1.35rem;}
+.lf{display:flex;align-items:baseline;justify-content:space-between;gap:1.2rem;padding:.38rem .7rem;border-radius:8px;transition:background .16s;}
+.lf:hover{background:var(--surface);}
+.lf-name{font-family:var(--f2);font-size:.77rem;color:var(--cream);flex-shrink:0;}
+.lf-note{font-size:.74rem;color:var(--muted);text-align:right;line-height:1.35;}
+.lf.lf-script .lf-name{color:var(--teal);}
+.lf.lf-script{background:rgba(26,122,114,.04);border-radius:8px;}
+/* ═══════════════════════════════════════════════ */
+
+@media(max-width:720px){
+  .hero{grid-template-columns:1fr;}
+  .hero-stats{flex-direction:row;flex-wrap:wrap;}
+  .stat-card{flex:1;min-width:110px;}
+  .grid-2,.grid-3,.servers-row{grid-template-columns:1fr;}
+  .lf{flex-direction:column;gap:.1rem;}
+  .lf-note{text-align:left;}
+}
+</style>
+</head>
+<body>
+
+<div class="lightbox-overlay" id="lightbox">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" id="lb-close">✕</button>
+    <img src="" id="lb-img" alt=""/>
+  </div>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-back">← Portfolio</a>
+  <span class="nav-sep">/</span>
+  <span class="nav-title">Heberge4</span>
+</nav>
+
+<div class="hero">
+  <div>
+    <div class="hero-badge">✦ Projet 04 — BTS SIO SLAM</div>
+    <h1>Heberg<em>e4</em></h1>
+    <p class="hero-desc">Plateforme d'hébergement web automatisé sous Linux Debian. Chaque utilisateur inscrit obtient automatiquement un compte Linux, un espace web Apache, une base de données MySQL, un enregistrement DNS Bind9 et un accès GLPI.</p>
+    <div class="tags">
+      <span class="tag">Linux Debian</span><span class="tag">Apache2</span><span class="tag">PHP</span>
+      <span class="tag blue">Bind9 / DNS</span><span class="tag blue">MariaDB</span>
+      <span class="tag gold">GLPI</span><span class="tag gold">Bash</span>
+      <span class="tag ink">vsftpd</span>
+    </div>
+    <div class="hero-links">
+      <a href="#architecture" class="btn-primary">🗺️ Architecture</a>
+      <a href="#fonctionnement" class="btn-ghost">⚙️ Fonctionnement</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card"><span class="num">3</span><span class="lbl">Serveurs</span></div>
+    <div class="stat-card"><span class="num">3</span><span class="lbl">Scripts Bash</span></div>
+    <div class="stat-card"><span class="num">2</span><span class="lbl">Pages PHP</span></div>
+    <div class="stat-card"><span class="num">∞</span><span class="lbl">Utilisateurs</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section r">
+    <div class="section-label">Contexte</div>
+    <h2 class="section-title">Une plateforme <em>d'hébergement.</em></h2>
+    <div class="grid-2">
+      <div class="feat-card r d1">
+        <span class="feat-icon">🌐</span>
+        <p class="feat-title">L'idée du projet</p>
+        <ul class="feat-list">
+          <li>Hébergement web gratuit et automatisé</li>
+          <li>Chaque utilisateur dispose d'un espace personnel</li>
+          <li>Inscription via interface PHP → tout se crée automatiquement</li>
+          <li>Accès GLPI intégré pour le support (ticketing)</li>
+          <li>Dashboard personnel de gestion du compte</li>
+          <li>Suppression complète du compte en un clic</li>
+        </ul>
+      </div>
+      <div class="feat-card r d2">
+        <span class="feat-icon">🏗️</span>
+        <p class="feat-title">Architecture 3 serveurs</p>
+        <ul class="feat-list">
+          <li><strong style="color:var(--cream)">SrvWeb</strong> · 192.168.204.1 — Apache2, PHP, Bind9, interface</li>
+          <li><strong style="color:var(--cream)">SrvBDD</strong> · 192.168.204.2 — MariaDB, base Projet &amp; GLPI</li>
+          <li><strong style="color:var(--cream)">SrvGLPI</strong> · 192.168.204.4 — GLPI 10.0.15, ticketing</li>
+          <li>Communication inter-serveurs via PDO MySQL</li>
+          <li>Scripts Bash exécutés en <code style="font-size:.75rem;color:var(--marigold)">sudo</code> depuis PHP</li>
+          <li>DNS zone <code style="font-size:.75rem;color:var(--marigold)">heberge4.lan</code> géré dynamiquement</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <!-- ARCHITECTURE RÉSEAU -->
+  <div class="section r" id="architecture">
+    <div class="section-label">Architecture réseau</div>
+    <h2 class="section-title">Les <em>3 serveurs.</em></h2>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;" class="r d1">
+      <div class="servers-row">
+        <div class="server-box">
+          <span class="server-icon">🖥️</span>
+          <p class="server-name">SrvWeb</p>
+          <p class="server-ip">192.168.204.1</p>
+          <ul class="server-services">
+            <li>Apache2 + mod_userdir</li><li>PHP 8 + extensions</li><li>Bind9 (DNS)</li>
+            <li>vsftpd (FTP)</li><li>Interface PHP (inscription)</li><li>Scripts Bash</li>
+          </ul>
+        </div>
+        <div class="server-box">
+          <span class="server-icon">🗄️</span>
+          <p class="server-name">SrvBDD</p>
+          <p class="server-ip">192.168.204.2</p>
+          <ul class="server-services">
+            <li>MariaDB / MySQL</li><li>Base <code style="font-family:var(--f2);font-size:.7rem;color:var(--marigold)">Projet</code> (table users)</li>
+            <li>Base <code style="font-family:var(--f2);font-size:.7rem;color:var(--marigold)">glpidb</code></li>
+            <li>Accès root distant autorisé</li><li>bind-address = 0.0.0.0</li><li>max_allowed_packet = 32M</li>
+          </ul>
+        </div>
+        <div class="server-box">
+          <span class="server-icon">🎫</span>
+          <p class="server-name">SrvGLPI</p>
+          <p class="server-ip">192.168.204.4</p>
+          <ul class="server-services">
+            <li>GLPI 10.0.15</li><li>Apache2 + VirtualHost</li>
+            <li>MariaDB local (glpidb)</li><li>Agent d'inventaire 1.5</li>
+            <li>Ticketing &amp; helpdesk</li><li>Profils : glpi, normal, tech</li>
+          </ul>
+        </div>
+      </div>
+      <div class="network-arrow">
+        <div class="arrow-line"></div>
+        <span>SrvWeb ↔ SrvBDD (PDO port 3306) · SrvWeb ↔ SrvGLPI (PDO port 3306)</span>
+        <div class="arrow-line"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <!-- ARCHITECTURE FICHIERS — COMPOSANT RÉUTILISABLE -->
+  <div class="section r">
+    <div class="section-label">Structure</div>
+    <h2 class="section-title">Architecture <em>des fichiers.</em></h2>
+
+    <div class="structure-mvc r d1">
+
+      <!-- Scripts Bash -->
+      <div class="layer open">
+        <div class="layer-header" onclick="toggleLayer(this)">
+          <div class="layer-left">
+            <span class="layer-icon">⚙️</span>
+            <div>
+              <span class="layer-path">/usr/local/bin/</span>
+              <span class="layer-desc">Scripts Bash — exécutés via sudo depuis PHP</span>
+            </div>
+          </div>
+          <div class="layer-meta"><span class="layer-badge">3 scripts</span><span class="layer-chevron">▾</span></div>
+        </div>
+        <div class="layer-body">
+          <div class="layer-files">
+            <div class="lf lf-script"><span class="lf-name">creation_utilisateur.sh</span><span class="lf-note">Crée compte Linux · espace web · MySQL · Apache conf · DNS</span></div>
+            <div class="lf lf-script"><span class="lf-name">suppression_utilisateur.sh</span><span class="lf-note">Supprime tout en 9 étapes : Linux · MySQL · Apache · DNS · GLPI</span></div>
+            <div class="lf lf-script"><span class="lf-name">modifier_mdp_linux.sh</span><span class="lf-note">Met à jour le mot de passe Linux via chpasswd</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interface PHP -->
+      <div class="layer">
+        <div class="layer-header" onclick="toggleLayer(this)">
+          <div class="layer-left">
+            <span class="layer-icon">🌐</span>
+            <div>
+              <span class="layer-path">/var/www/html/heberge4/</span>
+              <span class="layer-desc">Interface PHP — inscription · dashboard · modification</span>
+            </div>
+          </div>
+          <div class="layer-meta"><span class="layer-badge">2 fichiers PHP</span><span class="layer-chevron">▾</span></div>
+        </div>
+        <div class="layer-body">
+          <div class="layer-files">
+            <div class="lf"><span class="lf-name">index.php</span><span class="lf-note">Inscription utilisateur · dashboard personnel · formulaire modification</span></div>
+            <div class="lf"><span class="lf-name">update_compte.php</span><span class="lf-note">Mise à jour synchronisée BDD Projet + glpidb + Linux</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Apache / DNS -->
+      <div class="layer">
+        <div class="layer-header" onclick="toggleLayer(this)">
+          <div class="layer-left">
+            <span class="layer-icon">🌍</span>
+            <div>
+              <span class="layer-path">/etc/apache2/ &amp; /etc/bind/</span>
+              <span class="layer-desc">VirtualHosts dynamiques · zone DNS heberge4.lan</span>
+            </div>
+          </div>
+          <div class="layer-meta"><span class="layer-badge">Apache · Bind9</span><span class="layer-chevron">▾</span></div>
+        </div>
+        <div class="layer-body">
+          <div class="layer-group">
+            <div class="layer-group-title">🔧 sites-available/</div>
+            <div class="layer-files">
+              <div class="lf"><span class="lf-name">XXXX.conf</span><span class="lf-note">Template VirtualHost · XXXX remplacé par alias via sed</span></div>
+              <div class="lf"><span class="lf-name">glpi.conf</span><span class="lf-note">VirtualHost GLPI · 192.168.204.4</span></div>
+            </div>
+          </div>
+          <div class="layer-group">
+            <div class="layer-group-title">🔤 /etc/bind/</div>
+            <div class="layer-files">
+              <div class="lf"><span class="lf-name">named.conf.local</span><span class="lf-note">Zone heberge4.lan · type master</span></div>
+              <div class="lf lf-script"><span class="lf-name">db.heberge4.lan</span><span class="lf-note">Enregistrements A + CNAME ajoutés dynamiquement par Bash</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dossiers utilisateurs -->
+      <div class="layer">
+        <div class="layer-header" onclick="toggleLayer(this)">
+          <div class="layer-left">
+            <span class="layer-icon">👤</span>
+            <div>
+              <span class="layer-path">/home/$ALIAS/</span>
+              <span class="layer-desc">Créé automatiquement pour chaque utilisateur inscrit</span>
+            </div>
+          </div>
+          <div class="layer-meta"><span class="layer-badge">Par utilisateur</span><span class="layer-chevron">▾</span></div>
+        </div>
+        <div class="layer-body">
+          <div class="layer-files">
+            <div class="lf"><span class="lf-name">public_html/index.html</span><span class="lf-note">Page d'accueil par défaut · chown $ALIAS:$ALIAS</span></div>
+            <div class="lf lf-script"><span class="lf-name">Base MySQL $ALIAS</span><span class="lf-note">CREATE DATABASE $ALIAS · GRANT ALL PRIVILEGES isolé</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /structure-mvc -->
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <!-- FONCTIONNEMENT -->
+  <div class="section r" id="fonctionnement">
+    <div class="section-label">Fonctionnement</div>
+    <h2 class="section-title">Le cycle de <em>vie d'un compte.</em></h2>
+
+    <h3 style="font-family:var(--f3);font-size:1.1rem;color:var(--gold);margin-bottom:1rem;font-style:italic;">① Inscription — 7 étapes automatisées</h3>
+    <div class="flow r d1">
+      <div class="flow-step"><div class="flow-num">1</div><div class="flow-body"><h4>Formulaire PHP</h4><p>L'utilisateur saisit alias, nom, prénom, email et mot de passe. Données envoyées via PDO à la base <code>Projet</code> (SrvBDD) et simultanément à <code>glpidb</code> (SrvGLPI).</p></div></div>
+      <div class="flow-step"><div class="flow-num">2</div><div class="flow-body"><h4>Lancement du script Bash</h4><p>PHP exécute <code>sudo /usr/local/bin/creation_utilisateur.sh $alias $mdp $nom $prenom $mail</code> via <code>exec()</code>.</p></div></div>
+      <div class="flow-step"><div class="flow-num">3</div><div class="flow-body"><h4>Compte Linux</h4><p><code>useradd -m -d /home/$ALIAS $ALIAS</code> + <code>echo "$ALIAS:$MDP" | chpasswd</code></p></div></div>
+      <div class="flow-step"><div class="flow-num">4</div><div class="flow-body"><h4>Espace web</h4><p>Création <code>/home/$ALIAS/public_html/</code> avec <code>index.html</code> par défaut. Droits : <code>chown -R $ALIAS:$ALIAS</code>.</p></div></div>
+      <div class="flow-step"><div class="flow-num">5</div><div class="flow-body"><h4>Base MySQL</h4><p><code>CREATE DATABASE $ALIAS</code> + <code>GRANT ALL PRIVILEGES ON $ALIAS.* TO '$ALIAS'@'%'</code>. Base isolée par utilisateur.</p></div></div>
+      <div class="flow-step"><div class="flow-num">6</div><div class="flow-body"><h4>VirtualHost Apache</h4><p>Copie template <code>XXXX.conf</code>, remplacement via <code>sed</code>, activation <code>a2ensite</code> + rechargement Apache.</p></div></div>
+      <div class="flow-step"><div class="flow-num">7</div><div class="flow-body"><h4>DNS dynamique</h4><p><code>echo "$ALIAS IN CNAME SrvWeb" >> /etc/bind/db.heberge4.lan</code> + <code>service bind9 reload</code>.</p></div></div>
+    </div>
+
+    <h3 style="font-family:var(--f3);font-size:1.1rem;color:var(--gold);margin:2rem 0 1rem;font-style:italic;">② Suppression — 9 étapes de nettoyage</h3>
+    <div class="flow r d1">
+      <div class="flow-step"><div class="flow-num">1</div><div class="flow-body"><h4>Déclenchement PHP</h4><p>Clic "Supprimer le compte" → <code>sudo /usr/local/bin/suppression_utilisateur.sh $alias</code>.</p></div></div>
+      <div class="flow-step"><div class="flow-num">2</div><div class="flow-body"><h4>9 nettoyages</h4><p>BDD Projet · compte Linux (<code>userdel</code>) · <code>/home/$ALIAS</code> · utilisateur GLPI · <code>a2dissite</code> · conf Apache · rechargement Apache · entrée DNS · rechargement Bind9.</p></div></div>
+      <div class="flow-step"><div class="flow-num">3</div><div class="flow-body"><h4>Session détruite</h4><p><code>session_unset()</code> + <code>session_destroy()</code> + redirection. Aucune trace ne subsiste.</p></div></div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <div class="section r">
+    <div class="section-label">Points clés</div>
+    <h2 class="section-title">Ce qui rend ce projet <em>technique.</em></h2>
+    <div class="grid-2 r d1">
+      <div class="feature-highlight"><span class="fh-icon">🔗</span><div><div class="fh-title">PHP → Bash via exec() + sudo</div><div class="fh-desc">L'interface PHP déclenche les scripts Bash système via <code style="font-size:.75rem;color:var(--marigold)">exec("sudo /usr/local/bin/creation_utilisateur.sh " . escapeshellarg($alias))</code>. Une approche qui couple le web et l'administration système.</div></div></div>
+      <div class="feature-highlight"><span class="fh-icon">🔄</span><div><div class="fh-title">Double synchronisation BDD</div><div class="fh-desc">Chaque action met à jour simultanément deux bases sur deux serveurs distincts : <code style="font-size:.75rem;color:var(--marigold)">Projet</code> (192.168.204.2) et <code style="font-size:.75rem;color:var(--marigold)">glpidb</code> (192.168.204.4).</div></div></div>
+      <div class="feature-highlight"><span class="fh-icon">🌐</span><div><div class="fh-title">DNS dynamique avec Bind9</div><div class="fh-desc">À chaque inscription, un enregistrement CNAME est ajouté dynamiquement dans <code style="font-size:.75rem;color:var(--marigold)">/etc/bind/db.heberge4.lan</code> avec un simple <code style="font-size:.75rem;color:var(--marigold)">echo</code> Bash.</div></div></div>
+      <div class="feature-highlight"><span class="fh-icon">🧹</span><div><div class="fh-title">Suppression en 9 étapes</div><div class="fh-desc">Le script <code style="font-size:.75rem;color:var(--marigold)">suppression_utilisateur.sh</code> nettoie méthodiquement tout : BDD, Linux, home, GLPI, Apache, DNS. Aucune trace ne subsiste.</div></div></div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <div class="section r">
+    <div class="section-label">Compétences mobilisées</div>
+    <h2 class="section-title">Ce que j'ai <em>appris.</em></h2>
+    <div class="grid-2 r">
+      <div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Linux / Administration système</span><span class="skill-pct">82%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".82"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Bash — Scripts d'automatisation</span><span class="skill-pct">78%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".78"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Apache2 — VirtualHosts</span><span class="skill-pct">80%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".80"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">PHP / PDO — Connexion BDD</span><span class="skill-pct">75%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".75"></div></div></div>
+      </div>
+      <div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">MariaDB — Administration</span><span class="skill-pct">72%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".72"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Bind9 — DNS (zones, CNAME)</span><span class="skill-pct">70%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".70"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">GLPI — Installation &amp; config</span><span class="skill-pct">68%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".68"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Réseau — Architecture multi-serveurs</span><span class="skill-pct">75%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".75"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <div class="section r">
+    <div class="section-label">Stack technique</div>
+    <h2 class="section-title">Les <em>technologies</em> utilisées.</h2>
+    <div class="tech-grid r d1">
+      <div class="tech-pill"><span>🐧</span> Linux Debian</div><div class="tech-pill"><span>🌐</span> Apache2</div>
+      <div class="tech-pill"><span>🐘</span> PHP 8</div><div class="tech-pill"><span>🗄️</span> MariaDB / MySQL</div>
+      <div class="tech-pill"><span>🔤</span> Bind9 / DNS</div><div class="tech-pill"><span>📁</span> vsftpd (FTP)</div>
+      <div class="tech-pill"><span>⚙️</span> Bash scripting</div><div class="tech-pill"><span>🎫</span> GLPI 10.0.15</div>
+      <div class="tech-pill"><span>🔐</span> PDO (connexion BDD)</div><div class="tech-pill"><span>🔧</span> exec() / sudo</div>
+      <div class="tech-pill"><span>🖧</span> Réseau LAN statique</div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <div class="section r">
+    <div class="section-label">Aperçus</div>
+    <h2 class="section-title">Aperçus <em>du projet.</em></h2>
+    <div class="apercu-grid">
+      <figure class="apercu-item r d1"><img src="img/heberge4-accueil.png" alt="Accueil"/><figcaption>Page d'accueil Heberge4</figcaption></figure>
+      <figure class="apercu-item r d2"><img src="img/heberge4-connexion.png" alt="Connexion"/><figcaption>Page de connexion</figcaption></figure>
+      <figure class="apercu-item r d3"><img src="img/heberge4-inscription.png" alt="Inscription"/><figcaption>Formulaire d'inscription</figcaption></figure>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const overlay=document.getElementById('lightbox'),lbImg=document.getElementById('lb-img'),lbClose=document.getElementById('lb-close');
+document.querySelectorAll('.apercu-item img').forEach(img=>{img.addEventListener('click',()=>{lbImg.src=img.src;overlay.classList.add('active');});});
+lbClose.addEventListener('click',()=>overlay.classList.remove('active'));
+overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.classList.remove('active');});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')overlay.classList.remove('active');});
+function toggleLayer(h){h.closest('.layer').classList.toggle('open');}
+const skObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(!e.isIntersecting)return;e.target.querySelectorAll('.skill-fill').forEach(f=>{f.style.width=(parseFloat(f.dataset.w)*100)+'%';});skObs.unobserve(e.target);});},{threshold:.3});
+document.querySelectorAll('.grid-2').forEach(el=>skObs.observe(el));
+const rObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});},{threshold:.08});
+document.querySelectorAll('.r').forEach(el=>rObs.observe(el));
+</script>
+</body>
+</html>

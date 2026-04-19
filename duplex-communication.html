@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stage 2ème Année — Duplex Communication</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Nunito:wght@300;400;600;700&family=Fira+Code:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#faf6ee;--card:#ffffff;--marigold:#c8860a;--gold:#a0620a;
+  --rose:#c0334d;--fuchsia:#9b1f50;--teal:#1a7a72;--ink:#1a1b2e;
+  --cream:#2a1f0e;--muted:#7a6650;--border:rgba(180,120,20,.18);
+  --surface:#fff8ee;--f1:'Nunito',sans-serif;--f2:'Fira Code',monospace;
+  --f3:'Playfair Display',serif;--radius:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--f1);background:var(--bg);color:var(--cream);line-height:1.7;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");opacity:.5;}
+
+nav{position:sticky;top:0;background:rgba(250,246,238,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;gap:1rem;z-index:100;}
+.nav-back{text-decoration:none;color:var(--marigold);font-weight:700;font-size:.85rem;display:flex;align-items:center;gap:.4rem;transition:.2s;}
+.nav-back:hover{color:var(--gold);transform:translateX(-3px);}
+.nav-sep{color:var(--border);}
+.nav-title{font-family:var(--f3);font-style:italic;color:var(--muted);font-size:.9rem;}
+
+.hero{max-width:1000px;margin:0 auto;padding:4rem 2rem 2rem;display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:start;}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(26,122,114,.08);border:1px solid rgba(26,122,114,.25);border-radius:100px;padding:.3rem 1rem;font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:1.2rem;width:fit-content;}
+.hero h1{font-family:var(--f3);font-size:clamp(2.5rem,5vw,4.5rem);font-weight:900;line-height:1;margin-bottom:.6rem;}
+.hero h1 em{font-style:italic;background:linear-gradient(135deg,var(--teal),var(--marigold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-desc{color:var(--muted);font-size:1rem;font-weight:300;max-width:520px;margin-bottom:1.5rem;line-height:1.75;}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.8rem;}
+.tag{display:inline-block;background:rgba(192,51,77,.09);border:1px solid rgba(192,51,77,.2);color:var(--rose);padding:.22rem .75rem;border-radius:100px;font-size:.72rem;font-weight:700;}
+.tag.blue{background:rgba(26,122,114,.09);border-color:rgba(26,122,114,.25);color:var(--teal);}
+.tag.gold{background:rgba(200,134,10,.09);border-color:rgba(200,134,10,.25);color:var(--gold);}
+
+.hero-links{display:flex;gap:.8rem;flex-wrap:wrap;}
+.btn-primary{background:linear-gradient(135deg,var(--teal),var(--marigold));color:#fff;border:none;padding:.75rem 1.8rem;border-radius:100px;font-family:var(--f1);font-weight:700;font-size:.85rem;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:transform .3s,box-shadow .3s;box-shadow:0 8px 28px rgba(26,122,114,.2);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(26,122,114,.35);}
+.btn-ghost{background:transparent;color:var(--gold);border:1px solid rgba(200,134,10,.4);padding:.75rem 1.8rem;border-radius:100px;font-family:var(--f1);font-weight:700;font-size:.85rem;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:all .3s;}
+.btn-ghost:hover{background:rgba(200,134,10,.08);}
+
+.hero-stats{display:flex;flex-direction:column;gap:.8rem;min-width:160px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.2rem;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.05);}
+.stat-card .num{font-family:var(--f3);font-size:1.8rem;background:linear-gradient(135deg,var(--teal),var(--marigold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;line-height:1.1;}
+.stat-card .lbl{font-size:.7rem;color:var(--muted);font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+
+.container{max-width:1000px;margin:0 auto;padding:0 2rem 4rem;}
+.sep{display:flex;align-items:center;gap:1.5rem;max-width:1000px;margin:0 auto;padding:0 2rem;}
+.sep::before,.sep::after{content:'';flex:1;height:1px;background:var(--border);}
+.sep span{color:var(--marigold);font-size:.85rem;white-space:nowrap;}
+
+.section{padding:3rem 0;}
+.section-label{font-size:.7rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--marigold);margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem;}
+.section-label::before{content:'';display:block;width:20px;height:1px;background:var(--marigold);}
+.section-title{font-family:var(--f3);font-size:1.7rem;font-weight:700;color:var(--cream);margin-bottom:1.5rem;}
+.section-title em{font-style:italic;color:var(--gold);}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.6rem;transition:border-color .3s,box-shadow .3s,transform .3s;}
+.feat-card:hover{border-color:rgba(200,134,10,.3);box-shadow:0 12px 35px rgba(180,120,20,.1);transform:translateY(-3px);}
+.feat-icon{font-size:1.6rem;margin-bottom:.8rem;display:block;}
+.feat-title{font-family:var(--f3);font-size:1rem;font-style:italic;color:var(--gold);margin-bottom:.6rem;}
+.feat-list{list-style:none;padding:0;}
+.feat-list li{font-size:.85rem;color:var(--muted);padding:.25rem 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:.5rem;}
+.feat-list li:last-child{border-bottom:none;}
+.feat-list li::before{content:'→';color:var(--marigold);font-size:.75rem;flex-shrink:0;margin-top:.2rem;}
+
+.feature-highlight{background:linear-gradient(135deg,rgba(200,134,10,.05),rgba(192,51,77,.04));border:1px solid rgba(200,134,10,.18);border-radius:var(--radius);padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;margin-bottom:.8rem;transition:.3s;}
+.feature-highlight:hover{border-color:rgba(200,134,10,.3);}
+.fh-icon{font-size:1.4rem;flex-shrink:0;}
+.fh-title{font-weight:700;font-size:.9rem;color:var(--cream);margin-bottom:.2rem;}
+.fh-desc{font-size:.82rem;color:var(--muted);}
+
+/* Checklist CIVB */
+.checklist-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem;}
+.cl-group h3{font-family:var(--f3);font-size:.95rem;font-weight:700;color:var(--cream);margin-bottom:.8rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);}
+.cl{list-style:none;padding:0;}
+.cl li{display:flex;align-items:flex-start;gap:.5rem;padding:.28rem 0;font-size:.82rem;color:var(--muted);border-bottom:1px solid rgba(180,120,20,.05);}
+.cl li:last-child{border-bottom:none;}
+.ck{width:15px;height:15px;border-radius:50%;flex-shrink:0;margin-top:.22rem;display:flex;align-items:center;justify-content:center;font-size:.45rem;}
+.ck.done{background:rgba(26,122,114,.15);color:var(--teal);}
+.ck.todo{background:rgba(200,134,10,.1);color:var(--marigold);}
+.cl li.done-item>span:last-child{text-decoration:line-through;opacity:.5;}
+
+/* Réunions */
+.reunion-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem;}
+.reunion-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem;transition:border-color .3s;}
+.reunion-card:hover{border-color:rgba(200,134,10,.3);}
+.reunion-date{font-family:var(--f2);font-size:.62rem;letter-spacing:.12em;color:var(--marigold);margin-bottom:.3rem;}
+.reunion-title{font-family:var(--f3);font-size:.95rem;font-weight:700;color:var(--cream);margin-bottom:.4rem;}
+.reunion-desc{font-size:.8rem;color:var(--muted);line-height:1.6;}
+
+/* Nex box */
+.nex-box{background:linear-gradient(135deg,rgba(26,122,114,.05),rgba(200,134,10,.03));border:1px solid rgba(26,122,114,.22);border-radius:var(--radius);padding:1.8rem;display:flex;gap:1.2rem;align-items:flex-start;margin-top:1rem;}
+.nex-icon{font-size:2rem;flex-shrink:0;}
+.nex-title{font-family:var(--f3);font-size:1.1rem;font-weight:700;color:var(--teal);margin-bottom:.3rem;}
+.nex-desc{font-size:.85rem;color:var(--muted);line-height:1.7;}
+.nex-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.8rem;}
+.nex-tag{background:rgba(26,122,114,.08);border:1px solid rgba(26,122,114,.2);border-radius:100px;padding:.15rem .65rem;font-size:.68rem;font-weight:600;color:var(--teal);}
+
+.skill-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1.1rem;margin-bottom:.6rem;}
+.skill-row-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;}
+.skill-name{font-weight:700;font-size:.88rem;}
+.skill-pct{font-size:.75rem;color:var(--marigold);font-weight:700;}
+.skill-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.skill-fill{height:100%;background:linear-gradient(to right,var(--teal),var(--marigold));border-radius:2px;width:0;transition:width 1.2s ease;}
+
+.tech-grid{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem;}
+.tech-pill{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.5rem 1rem;font-size:.78rem;font-weight:600;color:var(--cream);display:flex;align-items:center;gap:.4rem;transition:.2s;}
+.tech-pill:hover{border-color:var(--marigold);color:var(--gold);}
+
+.apercu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;margin-top:1rem;}
+.apercu-item{border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--surface);}
+.apercu-item img{width:100%;height:220px;object-fit:cover;object-position:top;cursor:pointer;display:block;transition:.3s;}
+.apercu-item img:hover{opacity:.85;transform:scale(1.02);}
+.apercu-item figcaption{padding:.5rem .8rem;font-size:.75rem;color:var(--marigold);font-weight:600;text-align:center;}
+
+.lightbox-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;align-items:center;justify-content:center;}
+.lightbox-overlay.active{display:flex;}
+.lightbox-inner{position:relative;max-width:90vw;max-height:90vh;border-radius:16px;overflow:hidden;}
+.lightbox-inner img{width:100%;max-height:90vh;object-fit:contain;display:block;}
+.lightbox-close{position:absolute;top:.6rem;right:.9rem;background:rgba(0,0,0,.5);border:none;border-radius:50%;width:2.2rem;height:2.2rem;color:#fff;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+.r{opacity:0;transform:translateY(20px);transition:.6s ease;}
+.r.on{opacity:1;transform:none;}
+.r.d1{transition-delay:.08s;}.r.d2{transition-delay:.16s;}.r.d3{transition-delay:.24s;}
+
+@media(max-width:700px){
+  .hero{grid-template-columns:1fr;}
+  .hero-stats{flex-direction:row;flex-wrap:wrap;}
+  .stat-card{flex:1;min-width:120px;}
+  .grid-2,.grid-3,.checklist-grid,.reunion-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="lightbox-overlay" id="lightbox">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" id="lb-close">✕</button>
+    <img src="" id="lb-img" alt=""/>
+  </div>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-back">← Portfolio</a>
+  <span class="nav-sep">/</span>
+  <span class="nav-title">Stage 2ème Année</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-badge">✦ Stage — BTS SIO SLAM · 2ème Année</div>
+    <h1>Duplex <em>Communication</em></h1>
+    <p class="hero-desc">5 semaines au sein d'une agence de communication web à Chalon-sur-Saône. Refonte et maintenance du site CIVB sous WordPress + Elementor, réunions clients et suivi de projet.</p>
+    <div class="tags">
+      <span class="tag gold">Janv.–Févr. 2026</span>
+      <span class="tag gold">5 semaines</span>
+      <span class="tag blue">WordPress</span>
+      <span class="tag blue">Elementor</span>
+      <span class="tag">HTML / CSS</span>
+      <span class="tag">JavaScript</span>
+      <span class="tag blue">API</span>
+    </div>
+    <div class="hero-links">
+      <a href="#missions" class="btn-primary">📋 Missions CIVB</a>
+      <a href="#competences" class="btn-ghost">💡 Compétences</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card">
+      <span class="num">5</span>
+      <span class="lbl">Semaines</span>
+    </div>
+    <div class="stat-card">
+      <span class="num">35+</span>
+      <span class="lbl">Tâches CIVB</span>
+    </div>
+    <div class="stat-card">
+      <span class="num">3</span>
+      <span class="lbl">Réunions clients</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- CONTEXTE -->
+  <div class="section r">
+    <div class="section-label">Contexte</div>
+    <h2 class="section-title">L'agence et <em>la mission.</em></h2>
+    <div class="grid-2">
+      <div class="feat-card r d1">
+        <span class="feat-icon">🏢</span>
+        <p class="feat-title">Duplex Communication</p>
+        <ul class="feat-list">
+          <li>Agence web & communication — Chalon-sur-Saône</li>
+          <li>Stratégie de communication et création de sites</li>
+          <li>Accompagnement aux appels d'offres</li>
+          <li>Événementiel et marketing digital</li>
+          <li>Clientèle : TPE, PME, organisations professionnelles</li>
+          <li>Partenaire : Nex Studio / Nex Informatique</li>
+        </ul>
+      </div>
+      <div class="feat-card r d2">
+        <span class="feat-icon">🎯</span>
+        <p class="feat-title">Mission principale — Site CIVB</p>
+        <ul class="feat-list">
+          <li>Refonte et maintenance du site CIVB</li>
+          <li>CIVB = Conseil Interprofessionnel des Vins de Bordeaux</li>
+          <li>Site : civb2.nex-studio.com</li>
+          <li>Stack : WordPress + Elementor</li>
+          <li>Corrections issues de réunions clients</li>
+          <li>Intégration CSS/HTML/JS personnalisés</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <!-- RÉUNIONS -->
+  <div class="section r">
+    <div class="section-label">Réunions clients</div>
+    <h2 class="section-title">Suivi de <em>projet.</em></h2>
+    <div class="reunion-grid r d1">
+      <div class="reunion-card">
+        <p class="reunion-date">28 Janvier 2026</p>
+        <h3 class="reunion-title">Réunion Victoria — CIVB</h3>
+        <p class="reunion-desc">Corrections à apporter au site : accès Instagram pour remonter les posts, texte Presse à créer, 2 AOP texte, footer & logos responsive, vérification des retours texte CIVB.</p>
+      </div>
+      <div class="reunion-card">
+        <p class="reunion-date">29 Janvier 2026</p>
+        <h3 class="reunion-title">Réunion site boulangerie</h3>
+        <p class="reunion-desc">Développement d'une application (cahier des charges). Enjeu : convaincre des boulangers. App connectée à l'API de la plateforme. Budget création + maintenance. To go to go — suppression commissions (50% du prix de vente).</p>
+      </div>
+      <div class="reunion-card">
+        <p class="reunion-date">02 Février 2026</p>
+        <h3 class="reunion-title">Réunion lundi — UX/UI</h3>
+        <p class="reunion-desc">UX : expérience utilisateur. UI : expérience interface et design. Introduction aux concepts de conception centrée utilisateur appliqués aux projets web de l'agence.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <!-- POINTS CLÉS -->
+  <div class="section r">
+    <div class="section-label">Points marquants</div>
+    <h2 class="section-title">Moments <em>clés.</em></h2>
+    <div class="grid-2 r d1">
+      <div class="feature-highlight">
+        <span class="fh-icon">🌐</span>
+        <div><div class="fh-title">WordPress + Elementor — intégration avancée</div><div class="fh-desc">Travail quotidien sur le back-office WordPress et Elementor : création de sections, modification de templates, responsive design. Injection de CSS/HTML/JS personnalisés pour dépasser les limites du no-code.</div></div>
+      </div>
+      <div class="feature-highlight">
+        <span class="fh-icon">🗓️</span>
+        <div><div class="fh-title">Réunions clients — prise de notes et suivi</div><div class="fh-desc">Participation aux réunions avec les clients CIVB et boulangerie. Prise de notes, compréhension des besoins non techniques, traduction en tâches concrètes sur le site.</div></div>
+      </div>
+      <div class="feature-highlight">
+        <span class="fh-icon">🔑</span>
+        <div><div class="fh-title">Intégration API — clé copiée et configurée</div><div class="fh-desc">Configuration d'une clé API sur le site WordPress. Première expérience avec la connexion entre un CMS et une API externe, compréhension du flux de données.</div></div>
+      </div>
+      <div class="feature-highlight">
+        <span class="fh-icon">💻</span>
+        <div><div class="fh-title">2 jours chez Nex Informatique</div><div class="fh-desc">Passage chez le partenaire pour travailler dans un environnement de développement pur. Avancement sur un projet personnel en HTML, CSS et Java — retour aux fondamentaux après une période WordPress.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <!-- NEX -->
+  <div class="section r">
+    <div class="section-label">Parenthèse</div>
+    <h2 class="section-title">2 jours chez <em>Nex Informatique.</em></h2>
+    <div class="nex-box r d1">
+      <span class="nex-icon">💻</span>
+      <div>
+        <p class="nex-title">Nex Informatique · Partenaire de Duplex</p>
+        <p class="nex-desc">Durant ce stage, j'ai eu l'opportunité de passer environ 2 jours chez Nex Informatique, partenaire de Duplex Communication. Ce passage m'a permis de travailler dans un environnement de développement différent, axé sur le code pur. J'ai avancé sur un projet personnel en utilisant HTML, CSS et Java — une bouffée d'air après une période centrée sur WordPress et Elementor. J'ai aussi pu observer l'organisation d'une structure technique partenaire et comprendre comment les deux entités collaborent.</p>
+        <div class="nex-tags">
+          <span class="nex-tag">HTML</span>
+          <span class="nex-tag">CSS</span>
+          <span class="nex-tag">Java</span>
+          <span class="nex-tag">Projet personnel</span>
+          <span class="nex-tag">Environnement technique</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <!-- COMPÉTENCES -->
+  <div class="section r" id="competences">
+    <div class="section-label">Compétences mobilisées</div>
+    <h2 class="section-title">Ce que j'ai <em>appris.</em></h2>
+    <div class="grid-2 r">
+      <div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">WordPress — back-office & pages</span><span class="skill-pct">80%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".80"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Elementor — maquettage avancé</span><span class="skill-pct">75%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".75"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">CSS / HTML personnalisé</span><span class="skill-pct">82%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".82"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">JavaScript (onglets, interactions)</span><span class="skill-pct">60%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".60"></div></div></div>
+      </div>
+      <div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Responsive design</span><span class="skill-pct">78%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".78"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Suivi de tâches client</span><span class="skill-pct">85%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".85"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Participation aux réunions</span><span class="skill-pct">80%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".80"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Notions UX / UI</span><span class="skill-pct">65%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".65"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <!-- TECHNOLOGIES -->
+  <div class="section r">
+    <div class="section-label">Stack technique</div>
+    <h2 class="section-title">Les <em>outils</em> utilisés.</h2>
+    <div class="tech-grid r d1">
+      <div class="tech-pill"><span>🌐</span> WordPress</div>
+      <div class="tech-pill"><span>⚡</span> Elementor</div>
+      <div class="tech-pill"><span>🎨</span> HTML / CSS</div>
+      <div class="tech-pill"><span>⚙️</span> JavaScript</div>
+      <div class="tech-pill"><span>🔑</span> API (intégration)</div>
+      <div class="tech-pill"><span>🛡️</span> Captcha</div>
+      <div class="tech-pill"><span>📱</span> Responsive design</div>
+      <div class="tech-pill"><span>📁</span> Google Drive</div>
+      <div class="tech-pill"><span>☕</span> Java (Nex)</div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <!-- APERÇUS -->
+  <div class="section r">
+    <div class="section-label">Aperçus</div>
+    <h2 class="section-title">Aperçus <em>du stage.</em></h2>
+    <div class="apercu-grid">
+      <figure class="apercu-item r d1">
+        <img src="img/civb-.png" alt="Site CIVB — Accueil"/>
+        <figcaption>Site CIVB Accueil</figcaption>
+      </figure>
+      <figure class="apercu-item r d2">
+        <img src="img/civb-css.png" alt="Site Css personnalisé"/>
+        <figcaption>Css personnalisé</figcaption>
+      </figure>
+      <figure class="apercu-item r d3">
+        <img src="img/civb recapchat.jpg" alt="recaptcha"/>
+        <figcaption>Recaptcha</figcaption>
+      </figure>
+      <figure class="apercu-item r d4">
+        <img src="img/civb-tableau de bord.png" alt="Tableau de Bord"/>
+        <figcaption>Tableau de Bord</figcaption>
+      </figure>
+      <figure class="apercu-item r d5">
+        <img src="img/civb-elementor.png" alt="Elementor"/>
+        <figcaption>Elementor</figcaption>
+      </figure>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const overlay=document.getElementById('lightbox');
+const lbImg=document.getElementById('lb-img');
+const lbClose=document.getElementById('lb-close');
+document.querySelectorAll('.apercu-item img').forEach(img=>{
+  img.addEventListener('click',()=>{lbImg.src=img.src;overlay.classList.add('active');});
+});
+lbClose.addEventListener('click',()=>overlay.classList.remove('active'));
+overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.classList.remove('active');});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')overlay.classList.remove('active');});
+
+const skObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    e.target.querySelectorAll('.skill-fill').forEach(f=>{f.style.width=(parseFloat(f.dataset.w)*100)+'%';});
+    skObs.unobserve(e.target);
+  });
+},{threshold:.3});
+document.querySelectorAll('.grid-2').forEach(el=>skObs.observe(el));
+
+const rObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});
+},{threshold:.08});
+document.querySelectorAll('.r').forEach(el=>rObs.observe(el));
+</script>
+</body>
+</html>

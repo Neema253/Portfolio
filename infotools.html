@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>InfoTools — Détail du projet</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Nunito:wght@300;400;600;700&family=Fira+Code:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#faf6ee;--card:#ffffff;--marigold:#c8860a;--gold:#a0620a;
+  --rose:#c0334d;--fuchsia:#9b1f50;--teal:#1a7a72;--ink:#1a1b2e;
+  --cream:#2a1f0e;--muted:#7a6650;--border:rgba(180,120,20,.18);
+  --surface:#fff8ee;--f1:'Nunito',sans-serif;--f2:'Fira Code',monospace;
+  --f3:'Playfair Display',serif;--radius:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--f1);background:var(--bg);color:var(--cream);line-height:1.7;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");opacity:.5;}
+nav{position:sticky;top:0;background:rgba(250,246,238,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;gap:1rem;z-index:100;}
+.nav-back{text-decoration:none;color:var(--marigold);font-weight:700;font-size:.85rem;display:flex;align-items:center;gap:.4rem;transition:.2s;}
+.nav-back:hover{color:var(--gold);transform:translateX(-3px);}
+.nav-sep{color:var(--border);}
+.nav-title{font-family:var(--f3);font-style:italic;color:var(--muted);font-size:.9rem;}
+.hero{max-width:1000px;margin:0 auto;padding:4.5rem 2rem 2.5rem;display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:start;}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(200,134,10,.08);border:1px solid rgba(200,134,10,.25);border-radius:100px;padding:.32rem 1rem;font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:1.3rem;width:fit-content;}
+.hero h1{font-family:var(--f3);font-size:clamp(2.6rem,5vw,4.8rem);font-weight:900;line-height:.98;margin-bottom:.7rem;}
+.hero h1 em{font-style:italic;background:linear-gradient(135deg,var(--marigold),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-desc{color:var(--muted);font-size:1rem;font-weight:300;max-width:530px;margin-bottom:1.6rem;line-height:1.78;}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.9rem;}
+.tag{display:inline-block;background:rgba(192,51,77,.09);border:1px solid rgba(192,51,77,.2);color:var(--rose);padding:.22rem .78rem;border-radius:100px;font-size:.72rem;font-weight:700;}
+.tag.blue{background:rgba(26,122,114,.09);border-color:rgba(26,122,114,.25);color:var(--teal);}
+.tag.gold{background:rgba(200,134,10,.09);border-color:rgba(200,134,10,.28);color:var(--gold);}
+.tag.ink{background:rgba(26,27,46,.09);border-color:rgba(26,27,46,.2);color:var(--ink);}
+.hero-links{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:.3rem;}
+.btn-primary{background:linear-gradient(135deg,var(--marigold),var(--fuchsia));color:#fff;border:none;padding:.78rem 1.9rem;border-radius:100px;font-family:var(--f1);font-weight:700;font-size:.85rem;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:transform .3s,box-shadow .3s;box-shadow:0 8px 28px rgba(200,134,10,.26);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(200,134,10,.42);}
+.btn-ghost{background:transparent;color:var(--gold);border:1px solid rgba(200,134,10,.4);padding:.78rem 1.9rem;border-radius:100px;font-family:var(--f1);font-weight:700;font-size:.85rem;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:all .3s;}
+.btn-ghost:hover{background:rgba(200,134,10,.08);}
+.hero-stats{display:flex;flex-direction:column;gap:.8rem;min-width:165px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.05);transition:border-color .3s,transform .3s;}
+.stat-card:hover{border-color:rgba(200,134,10,.3);transform:translateY(-2px);}
+.stat-card .num{font-family:var(--f3);font-size:2rem;background:linear-gradient(135deg,var(--marigold),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;line-height:1.1;}
+.stat-card .lbl{font-size:.68rem;color:var(--muted);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-top:.1rem;}
+.container{max-width:1000px;margin:0 auto;padding:0 2rem 5rem;}
+.sep{display:flex;align-items:center;gap:1.5rem;max-width:1000px;margin:0 auto;padding:0 2rem;}
+.sep::before,.sep::after{content:'';flex:1;height:1px;background:var(--border);}
+.sep span{color:var(--marigold);font-size:.85rem;white-space:nowrap;}
+.section{padding:3.2rem 0;}
+.section-label{font-size:.68rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--marigold);margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem;}
+.section-label::before{content:'';display:block;width:22px;height:1px;background:var(--marigold);}
+.section-title{font-family:var(--f3);font-size:1.75rem;font-weight:700;color:var(--cream);margin-bottom:1.6rem;}
+.section-title em{font-style:italic;color:var(--gold);}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.6rem;transition:border-color .3s,box-shadow .3s,transform .3s;}
+.feat-card:hover{border-color:rgba(200,134,10,.3);box-shadow:0 12px 36px rgba(180,120,20,.1);transform:translateY(-3px);}
+.feat-icon{font-size:1.7rem;margin-bottom:.8rem;display:block;}
+.feat-title{font-family:var(--f3);font-size:1rem;font-style:italic;color:var(--gold);margin-bottom:.65rem;}
+.feat-list{list-style:none;}
+.feat-list li{font-size:.85rem;color:var(--muted);padding:.27rem 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:.5rem;}
+.feat-list li:last-child{border-bottom:none;}
+.feat-list li::before{content:'→';color:var(--marigold);font-size:.74rem;flex-shrink:0;margin-top:.25rem;}
+.feature-highlight{background:linear-gradient(135deg,rgba(200,134,10,.05),rgba(192,51,77,.04));border:1px solid rgba(200,134,10,.18);border-radius:var(--radius);padding:1.5rem 1.6rem;display:flex;gap:1.1rem;align-items:flex-start;margin-bottom:.85rem;transition:border-color .3s,transform .3s;}
+.feature-highlight:hover{border-color:rgba(200,134,10,.32);transform:translateX(3px);}
+.fh-icon{font-size:1.5rem;flex-shrink:0;margin-top:.05rem;}
+.fh-title{font-weight:700;font-size:.92rem;color:var(--cream);margin-bottom:.22rem;}
+.fh-desc{font-size:.83rem;color:var(--muted);line-height:1.65;}
+.sec-table{width:100%;border-collapse:collapse;font-size:.83rem;margin-top:1rem;}
+.sec-table th{background:rgba(200,134,10,.08);color:var(--gold);font-weight:700;padding:.7rem 1rem;text-align:left;border-bottom:2px solid rgba(200,134,10,.2);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;}
+.sec-table td{padding:.7rem 1rem;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;}
+.sec-table tr:hover td{background:var(--surface);}
+.sbadge{display:inline-block;padding:.15rem .6rem;border-radius:100px;font-size:.68rem;font-weight:700;}
+.sbadge.pass{background:rgba(26,122,114,.12);color:var(--teal);border:1px solid rgba(26,122,114,.25);}
+.sbadge.code{background:rgba(200,134,10,.1);color:var(--gold);border:1px solid rgba(200,134,10,.2);font-family:var(--f2);}
+.sbadge.method{background:rgba(192,51,77,.1);color:var(--rose);border:1px solid rgba(192,51,77,.2);}
+.note-card{background:linear-gradient(135deg,rgba(200,134,10,.06),rgba(192,51,77,.04));border:1px solid rgba(200,134,10,.2);border-radius:var(--radius);padding:1.2rem 1.5rem;margin-top:1rem;font-size:.85rem;color:var(--muted);display:flex;gap:.8rem;align-items:flex-start;}
+.note-card::before{content:'💡';font-size:1rem;flex-shrink:0;margin-top:.1rem;}
+.skill-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.95rem 1.15rem;margin-bottom:.65rem;}
+.skill-row-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;}
+.skill-name{font-weight:700;font-size:.88rem;}
+.skill-pct{font-size:.75rem;color:var(--marigold);font-weight:700;}
+.skill-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.skill-fill{height:100%;background:linear-gradient(to right,var(--marigold),var(--rose));border-radius:2px;width:0;transition:width 1.25s cubic-bezier(.4,0,.2,1);}
+.tech-grid{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem;}
+.tech-pill{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.5rem 1.05rem;font-size:.78rem;font-weight:600;color:var(--cream);display:flex;align-items:center;gap:.4rem;transition:.2s;}
+.tech-pill:hover{border-color:var(--marigold);color:var(--gold);}
+.apercu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;margin-top:1rem;}
+.apercu-item{border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--surface);}
+.apercu-item img{width:100%;height:220px;object-fit:cover;object-position:top;cursor:pointer;display:block;transition:.3s;}
+.apercu-item img:hover{opacity:.84;transform:scale(1.025);}
+.apercu-item figcaption{padding:.5rem .85rem;font-size:.74rem;color:var(--marigold);font-weight:700;text-align:center;}
+.lightbox-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.87);z-index:9999;align-items:center;justify-content:center;}
+.lightbox-overlay.active{display:flex;}
+.lightbox-inner{position:relative;max-width:90vw;max-height:90vh;border-radius:16px;overflow:hidden;}
+.lightbox-inner img{width:100%;max-height:90vh;object-fit:contain;display:block;}
+.lightbox-close{position:absolute;top:.6rem;right:.9rem;background:rgba(0,0,0,.55);border:none;border-radius:50%;width:2.2rem;height:2.2rem;color:#fff;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.r{opacity:0;transform:translateY(22px);transition:.62s ease;}
+.r.on{opacity:1;transform:none;}
+.r.d1{transition-delay:.08s;}.r.d2{transition-delay:.16s;}.r.d3{transition-delay:.24s;}
+
+/* ═══ COMPOSANT RÉUTILISABLE — .structure-mvc ═══ */
+.structure-mvc{display:flex;flex-direction:column;gap:.55rem;}
+.layer{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--card);transition:border-color .25s,box-shadow .25s;}
+.layer:hover{border-color:rgba(200,134,10,.28);}
+.layer.open{border-color:rgba(200,134,10,.38);box-shadow:0 6px 24px rgba(180,120,20,.08);}
+.layer-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.35rem;cursor:pointer;user-select:none;gap:1rem;transition:background .2s;}
+.layer-header:hover{background:rgba(200,134,10,.03);}
+.layer.open .layer-header{background:linear-gradient(135deg,rgba(200,134,10,.055),rgba(192,51,77,.025));}
+.layer-left{display:flex;align-items:center;gap:.95rem;}
+.layer-icon{font-size:1.25rem;flex-shrink:0;width:2rem;text-align:center;}
+.layer-path{display:block;font-family:var(--f2);font-size:.81rem;color:var(--cream);font-weight:600;margin-bottom:.08rem;}
+.layer-desc{display:block;font-size:.74rem;color:var(--muted);}
+.layer-meta{display:flex;align-items:center;gap:.75rem;flex-shrink:0;}
+.layer-badge{background:rgba(200,134,10,.1);border:1px solid rgba(200,134,10,.22);color:var(--gold);font-size:.67rem;font-weight:700;padding:.2rem .72rem;border-radius:100px;white-space:nowrap;}
+.layer-chevron{font-size:.72rem;color:var(--muted);transition:transform .3s cubic-bezier(.4,0,.2,1);flex-shrink:0;}
+.layer.open .layer-chevron{transform:rotate(180deg);}
+.layer-body{max-height:0;overflow:hidden;transition:max-height .38s cubic-bezier(.4,0,.2,1);border-top:1px solid transparent;}
+.layer.open .layer-body{max-height:1400px;border-top-color:var(--border);}
+.layer-group{padding:.85rem 1.35rem 0;}
+.layer-group:last-child{padding-bottom:.85rem;}
+.layer-group-title{font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--marigold);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.layer-group-title::before{content:'';display:block;width:12px;height:1px;background:var(--marigold);}
+.layer-files{display:flex;flex-direction:column;gap:.18rem;}
+.layer-body>.layer-files{padding:.85rem 1.35rem;}
+.lf{display:flex;align-items:baseline;justify-content:space-between;gap:1.2rem;padding:.38rem .7rem;border-radius:8px;transition:background .16s;}
+.lf:hover{background:var(--surface);}
+.lf-name{font-family:var(--f2);font-size:.77rem;color:var(--cream);flex-shrink:0;}
+.lf-note{font-size:.74rem;color:var(--muted);text-align:right;line-height:1.35;}
+.lf.lf-teal .lf-name{color:var(--teal);}
+.lf.lf-teal{background:rgba(26,122,114,.04);border-radius:8px;}
+/* ═══════════════════════════════════════════════ */
+
+@media(max-width:720px){
+  .hero{grid-template-columns:1fr;}
+  .hero-stats{flex-direction:row;flex-wrap:wrap;}
+  .stat-card{flex:1;min-width:110px;}
+  .grid-2,.grid-3{grid-template-columns:1fr;}
+  .lf{flex-direction:column;gap:.1rem;}
+  .lf-note{text-align:left;}
+}
+</style>
+</head>
+<body>
+
+<div class="lightbox-overlay" id="lightbox">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" id="lb-close">✕</button>
+    <img src="" id="lb-img" alt=""/>
+  </div>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-back">← Portfolio</a>
+  <span class="nav-sep">/</span>
+  <span class="nav-title">InfoTools</span>
+</nav>
+
+<div class="hero">
+  <div>
+    <div class="hero-badge">✦ Projet 02 — BTS SIO SLAM</div>
+    <h1>Info<em>Tools</em></h1>
+    <p class="hero-desc">Suite logicielle complète pour une entreprise prestataire informatique : CRM web Laravel pour les commerciaux (Active Directory, rendez-vous, produits), site vitrine, application Android avec notifications, et campagne de tests de sécurité API.</p>
+    <div class="tags">
+      <span class="tag">Laravel</span><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">SQLite</span><span class="tag">C#</span><span class="tag">WinForms/WPF</span><span class="tag">HTML/CSS</span>
+      <span class="tag blue">API REST</span><span class="tag blue">Sanctum</span><span class="tag blue">Active Directory</span>
+      <span class="tag gold">Tests sécurité</span><span class="tag gold">Audit logs</span><span class="tag gold">Export PDF</span>
+    </div>
+    <div class="hero-links">
+      <a href="https://github.com/raphaelmoryson/InfoTools-Web-Laravel" target="_blank" class="btn-primary">🐙 Voir sur GitHub ↗</a>
+      <a href="#architecture" class="btn-ghost">📐 Architecture</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card"><span class="num">4</span><span class="lbl">Missions</span></div>
+    <div class="stat-card"><span class="num">3</span><span class="lbl">Tests sécu ✅</span></div>
+    <div class="stat-card"><span class="num">4</span><span class="lbl">Scénarios</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section r">
+    <div class="section-label">Contexte</div>
+    <h2 class="section-title">Un projet <em>en quatre missions.</em></h2>
+    <div class="grid-2">
+      <div class="feat-card r d1">
+        <span class="feat-icon">🖥️</span>
+        <p class="feat-title">Mission 1 — CRM lourd C# pour les managers</p>
+        <ul class="feat-list">
+          <li>Application lourde C# / WinForms ou WPF</li>
+          <li>Gestion prospects, clients, contacts & rendez-vous</li>
+          <li>Gestion des produits, stocks et facturations</li>
+          <li>Authentification via Active Directory (AD)</li>
+          <li>Statistiques & graphiques exportables en PDF</li>
+          <li>Logs d'audit BDD (qui / quand / quoi / avant→après)</li>
+        </ul>
+      </div>
+      <div class="feat-card r d2">
+        <span class="feat-icon">💼</span>
+        <p class="feat-title">Mission 2 — CRM Web pour les commerciaux</p>
+        <ul class="feat-list">
+          <li>Authentification via Active Directory (LDAP / PHP)</li>
+          <li>Accès réservé aux commerciaux</li>
+          <li>Tableau de bord : rendez-vous à venir</li>
+          <li>Page produits de l'entreprise</li>
+          <li>Récapitulatif des achats par client</li>
+          <li>API REST sécurisée (Sanctum) + tests PHPUnit</li>
+        </ul>
+      </div>
+      <div class="feat-card r d1">
+        <span class="feat-icon">🌐</span>
+        <p class="feat-title">Mission 3 — Site vitrine Laravel</p>
+        <ul class="feat-list">
+          <li>Présentation de l'entreprise prestataire</li>
+          <li>Catalogue produits en base de données</li>
+          <li>Formulaire de demande de rendez-vous</li>
+          <li>Validation côté serveur (email, téléphone, message)</li>
+          <li>Journalisation des demandes dans <code style="font-size:.75rem;color:var(--marigold)">audit_logs</code></li>
+          <li>Architecture MVC Laravel + vues Blade</li>
+        </ul>
+      </div>
+      <div class="feat-card r d2">
+        <span class="feat-icon">📱</span>
+        <p class="feat-title">Mission 4 — Application CRM Android</p>
+        <ul class="feat-list">
+          <li>Application mobile Xamarin / C#</li>
+          <li>CRUD complet des rendez-vous</li>
+          <li>Base de données SQLite locale</li>
+          <li>Notifications locales (AlarmManager + BroadcastReceiver)</li>
+          <li>Interface <code style="font-size:.75rem;color:var(--marigold)">INotificationHelper</code> via DependencyService</li>
+          <li>Rappel configurable : 15, 30 ou 60 minutes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <!-- ARCHITECTURE — COMPOSANT RÉUTILISABLE -->
+  <div class="section r" id="architecture">
+    <div class="section-label">Architecture</div>
+    <h2 class="section-title">Structure <em>du projet Laravel.</em></h2>
+
+    <div class="structure-mvc r d1">
+
+      <!-- Mission 1 — C# -->
+      <div class="layer">
+        <div class="layer-header" onclick="toggleLayer(this)">
+          <div class="layer-left">
+            <span class="layer-icon">🖥️</span>
+            <div>
+              <span class="layer-path">Mission 1 — CRM lourd C# / WinForms</span>
+              <span class="layer-desc">Application desktop pour les managers · Active Directory</span>
+            </div>
+          </div>
+          <div class="layer-meta"><span class="layer-badge">C# · MySQL · NUnit</span><span class="layer-chevron">▾</span></div>
+        </div>
+        <div class="layer-body">
+          <div class="layer-files">
+            <div class="lf"><span class="lf-name">CrmApp.sln</span><span class="lf-note">Solution WinForms / WPF principale</span></div>
+            <div class="lf"><span class="lf-name">Services/</span><span class="lf-note">Logique métier testable · facturation · stocks · marges</span></div>
+            <div class="lf"><span class="lf-name">Models/</span><span class="lf-note">Prospect · Client · Contact · Appointment · Invoice · Product</span></div>
+            <div class="lf lf-teal"><span class="lf-name">AuditLogger.cs</span><span class="lf-note">Observer · triggers SQL · qui / quand / quoi / avant→après</span></div>
+            <div class="lf"><span class="lf-name">Reports/</span><span class="lf-note">Statistiques · graphiques · export PDF</span></div>
+            <div class="lf"><span class="lf-name">Auth/ActiveDirectoryAuth.cs</span><span class="lf-note">Authentification AD Windows</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mission 2 — CRM Web Laravel -->
+      <div class="layer open">
+        <div class="layer-header" onclick="toggleLayer(this)">
+          <div class="layer-left">
+            <span class="layer-icon">💼</span>
+            <div>
+              <span class="layer-path">Mission 2 — CRM Web Laravel</span>
+              <span class="layer-desc">Application web pour les commerciaux · API REST Sanctum</span>
+            </div>
+          </div>
+          <div class="layer-meta"><span class="layer-badge">Laravel · PHPUnit · Sanctum</span><span class="layer-chevron">▾</span></div>
+        </div>
+        <div class="layer-body">
+          <div class="layer-group">
+            <div class="layer-group-title">⚙️ app/Http/Controllers/</div>
+            <div class="layer-files">
+              <div class="lf"><span class="lf-name">VitrineController.php</span><span class="lf-note">Pages publiques · catalogue · formulaire RDV</span></div>
+              <div class="lf"><span class="lf-name">AppointmentApiController.php</span><span class="lf-note">API REST rendez-vous · CRUD · cloisonné par commercial</span></div>
+            </div>
+          </div>
+          <div class="layer-group">
+            <div class="layer-group-title">🗂️ app/Models/</div>
+            <div class="layer-files">
+              <div class="lf"><span class="lf-name">User.php</span><span class="lf-note">Commerciaux / clients · rôles</span></div>
+              <div class="lf"><span class="lf-name">Appointment.php</span><span class="lf-note">Eloquent · belongsTo User · validations</span></div>
+            </div>
+          </div>
+          <div class="layer-group">
+            <div class="layer-group-title">🗄️ database/migrations/</div>
+            <div class="layer-files">
+              <div class="lf"><span class="lf-name">create_users_table.php</span><span class="lf-note">name · email · role · password</span></div>
+              <div class="lf"><span class="lf-name">create_appointments_table.php</span><span class="lf-note">title · date · client · user_id</span></div>
+              <div class="lf lf-teal"><span class="lf-name">create_audit_logs_table.php</span><span class="lf-note">Journalisation INSERT · user · action · timestamp</span></div>
+            </div>
+          </div>
+          <div class="layer-group">
+            <div class="layer-group-title">🛡️ tests/Feature/</div>
+            <div class="layer-files">
+              <div class="lf lf-teal"><span class="lf-name">ApiSecurityTest.php</span><span class="lf-note">IDOR 403 · XSS 422 · Throttling 429 · Audit log</span></div>
+            </div>
+          </div>
+          <div class="layer-group">
+            <div class="layer-group-title">📄 docs/</div>
+            <div class="layer-files">
+              <div class="lf"><span class="lf-name">SECURITY_TEST_PLAN.md</span><span class="lf-note">Plan de tests sécurité documenté</span></div>
+              <div class="lf"><span class="lf-name">SECURITY_TEST_REPORT.md</span><span class="lf-note">Résultats d'exécution · 4/4 PASS</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mission 3 — Site vitrine -->
+      <div class="layer">
+        <div class="layer-header" onclick="toggleLayer(this)">
+          <div class="layer-left">
+            <span class="layer-icon">🌐</span>
+            <div>
+              <span class="layer-path">Mission 3 — Site vitrine Laravel</span>
+              <span class="layer-desc">Présentation entreprise · formulaire de rendez-vous</span>
+            </div>
+          </div>
+          <div class="layer-meta"><span class="layer-badge">Laravel · Blade · MySQL</span><span class="layer-chevron">▾</span></div>
+        </div>
+        <div class="layer-body">
+          <div class="layer-group">
+            <div class="layer-group-title">🖼️ resources/views/</div>
+            <div class="layer-files">
+              <div class="lf"><span class="lf-name">accueil.blade.php</span><span class="lf-note">Page d'accueil · présentation entreprise</span></div>
+              <div class="lf"><span class="lf-name">produits.blade.php</span><span class="lf-note">Catalogue produits (base de données)</span></div>
+              <div class="lf"><span class="lf-name">contact.blade.php</span><span class="lf-note">Formulaire de demande de rendez-vous</span></div>
+            </div>
+          </div>
+          <div class="layer-group">
+            <div class="layer-group-title">🛣️ routes/</div>
+            <div class="layer-files">
+              <div class="lf"><span class="lf-name">web.php</span><span class="lf-note">Routes publiques · vitrine</span></div>
+              <div class="lf"><span class="lf-name">api.php</span><span class="lf-note">Routes API · Sanctum · Bearer tokens</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mission 4 — Android -->
+      <div class="layer">
+        <div class="layer-header" onclick="toggleLayer(this)">
+          <div class="layer-left">
+            <span class="layer-icon">📱</span>
+            <div>
+              <span class="layer-path">Mission 4 — Application Android Xamarin</span>
+              <span class="layer-desc">CRM mobile · notifications locales · SQLite</span>
+            </div>
+          </div>
+          <div class="layer-meta"><span class="layer-badge">C# · Xamarin · SQLite</span><span class="layer-chevron">▾</span></div>
+        </div>
+        <div class="layer-body">
+          <div class="layer-files">
+            <div class="lf"><span class="lf-name">Pages/AppointmentsPage.xaml.cs</span><span class="lf-note">CRUD rendez-vous · liste · création · modification</span></div>
+            <div class="lf"><span class="lf-name">Database/AppDatabase.cs</span><span class="lf-note">SQLite local · SQLite-net-pcl</span></div>
+            <div class="lf lf-teal"><span class="lf-name">Services/INotificationHelper.cs</span><span class="lf-note">Interface DependencyService · AlarmManager · BroadcastReceiver</span></div>
+            <div class="lf lf-teal"><span class="lf-name">Android/NotificationHelper.cs</span><span class="lf-note">Implémentation Android · rappel 15 / 30 / 60 min</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /structure-mvc -->
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <!-- SÉCURITÉ -->
+  <div class="section r">
+    <div class="section-label">Sécurité & Tests</div>
+    <h2 class="section-title">Plan de tests <em>sécurité.</em></h2>
+    <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem;">L'API REST est testée contre 4 scénarios de sécurité critiques, tous validés avec succès.</p>
+    <div style="overflow-x:auto;" class="r d1">
+      <table class="sec-table">
+        <thead><tr><th>#</th><th>Scénario</th><th>Route</th><th>Méthode</th><th>Résultat</th><th>Statut</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1</strong></td><td>IDOR — Commercial A accède au RDV du commercial B</td><td><span class="sbadge code">GET /api/appointments/{id}</span></td><td><span class="sbadge method">Token A</span></td><td>403 Forbidden</td><td><span class="sbadge pass">✅ PASS</span></td></tr>
+          <tr><td><strong>2</strong></td><td>XSS — payload malformé avec balise &lt;script&gt;</td><td><span class="sbadge code">POST /api/appointments</span></td><td><span class="sbadge method">Token valide</span></td><td>422 Unprocessable</td><td><span class="sbadge pass">✅ PASS</span></td></tr>
+          <tr><td><strong>3</strong></td><td>Throttling — 6ᵉ tentative de login en 1 minute</td><td><span class="sbadge code">POST /api/login</span></td><td><span class="sbadge method">Aucun token</span></td><td>429 Too Many Requests</td><td><span class="sbadge pass">✅ PASS</span></td></tr>
+          <tr><td><strong>4</strong></td><td>Audit log — création d'un RDV génère une entrée</td><td><span class="sbadge code">POST /api/appointments</span></td><td><span class="sbadge method">Token valide</span></td><td>Ligne INSERT dans audit_logs</td><td><span class="sbadge pass">✅ PASS</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note-card r d2">
+      Tests exécutés via PHPUnit avec la commande <code style="font-family:var(--f2);color:var(--marigold)">php artisan test --filter ApiSecurityTest</code>. Authentification gérée par <strong>Laravel Sanctum</strong> (tokens Bearer).
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <div class="section r">
+    <div class="section-label">Points clés</div>
+    <h2 class="section-title">Ce qui rend ce projet <em>technique.</em></h2>
+    <div class="grid-2 r d1">
+      <div class="feature-highlight"><span class="fh-icon">🔐</span><div><div class="fh-title">Authentification Active Directory</div><div class="fh-desc">Le CRM web authentifie les commerciaux via LDAP / Active Directory. Seuls les comptes du domaine Windows peuvent accéder à l'interface.</div></div></div>
+      <div class="feature-highlight"><span class="fh-icon">🛡️</span><div><div class="fh-title">Protection IDOR</div><div class="fh-desc">Chaque commercial ne peut accéder qu'à ses propres rendez-vous. Toute tentative d'accès croisé entre comptes retourne un <code style="font-size:.75rem;color:var(--marigold)">403 Forbidden</code>.</div></div></div>
+      <div class="feature-highlight"><span class="fh-icon">📋</span><div><div class="fh-title">Logs d'audit</div><div class="fh-desc">Chaque création, modification ou suppression sur les tables critiques est journalisée avec l'identité de l'auteur, l'horodatage et les valeurs avant/après.</div></div></div>
+      <div class="feature-highlight"><span class="fh-icon">🔔</span><div><div class="fh-title">Notifications Android</div><div class="fh-desc">L'app Android utilise <code style="font-size:.75rem;color:var(--marigold)">AlarmManager</code> + <code style="font-size:.75rem;color:var(--marigold)">BroadcastReceiver</code> pour déclencher des rappels configurables avant chaque rendez-vous.</div></div></div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <div class="section r">
+    <div class="section-label">Compétences mobilisées</div>
+    <h2 class="section-title">Ce que j'ai <em>appris.</em></h2>
+    <div class="grid-2 r">
+      <div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Laravel / PHP</span><span class="skill-pct">90%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".90"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">API REST & Sanctum</span><span class="skill-pct">80%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".80"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">SQL / Eloquent ORM</span><span class="skill-pct">85%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".85"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Tests sécurité (PHPUnit)</span><span class="skill-pct">70%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".70"></div></div></div>
+      </div>
+      <div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">C# / Xamarin</span><span class="skill-pct">65%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".65"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Android natif (AlarmManager)</span><span class="skill-pct">60%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".60"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Architecture MVC</span><span class="skill-pct">88%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".88"></div></div></div>
+        <div class="skill-row"><div class="skill-row-top"><span class="skill-name">Cybersécurité applicative</span><span class="skill-pct">72%</span></div><div class="skill-bar"><div class="skill-fill" data-w=".72"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <div class="section r">
+    <div class="section-label">Stack technique</div>
+    <h2 class="section-title">Les <em>technologies</em> utilisées.</h2>
+    <div class="tech-grid r d1">
+      <div class="tech-pill"><span>🟠</span> Laravel</div><div class="tech-pill"><span>🐘</span> PHP 8</div>
+      <div class="tech-pill"><span>🗄️</span> MySQL</div><div class="tech-pill"><span>🔷</span> SQLite</div>
+      <div class="tech-pill"><span>💜</span> C# / WinForms</div><div class="tech-pill"><span>📱</span> C# / Xamarin</div>
+      <div class="tech-pill"><span>🔑</span> Laravel Sanctum</div><div class="tech-pill"><span>🏢</span> Active Directory (LDAP)</div>
+      <div class="tech-pill"><span>🧪</span> PHPUnit / NUnit</div><div class="tech-pill"><span>📦</span> Eloquent ORM</div>
+      <div class="tech-pill"><span>🌿</span> Blade Templates</div><div class="tech-pill"><span>📄</span> Export PDF</div>
+      <div class="tech-pill"><span>🔔</span> Android AlarmManager</div><div class="tech-pill"><span>🐙</span> Git / GitHub</div>
+    </div>
+  </div>
+
+  <div class="sep r"><span>✦ ✦ ✦</span></div>
+
+  <div class="section r">
+    <div class="section-label">Aperçus</div>
+    <h2 class="section-title">Aperçus <em>du projet.</em></h2>
+    <div class="apercu-grid">
+      <figure class="apercu-item r d1"><img src="img/heberge4-accueil.png" alt="Page d'accueil" title="Cliquer pour agrandir"/><figcaption>Page d'accueil du site vitrine</figcaption></figure>
+      <figure class="apercu-item r d2"><img src="img/heberge4-connexion.png" alt="Connexion" title="Cliquer pour agrandir"/><figcaption>Page de connexion</figcaption></figure>
+      <figure class="apercu-item r d3"><img src="img/heberge4-inscription.png" alt="Inscription" title="Cliquer pour agrandir"/><figcaption>Formulaire d'inscription</figcaption></figure>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const overlay=document.getElementById('lightbox'),lbImg=document.getElementById('lb-img'),lbClose=document.getElementById('lb-close');
+document.querySelectorAll('.apercu-item img').forEach(img=>{img.addEventListener('click',()=>{lbImg.src=img.src;overlay.classList.add('active');});});
+lbClose.addEventListener('click',()=>overlay.classList.remove('active'));
+overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.classList.remove('active');});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')overlay.classList.remove('active');});
+function toggleLayer(h){h.closest('.layer').classList.toggle('open');}
+const skObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(!e.isIntersecting)return;e.target.querySelectorAll('.skill-fill').forEach(f=>{f.style.width=(parseFloat(f.dataset.w)*100)+'%';});skObs.unobserve(e.target);});},{threshold:.3});
+document.querySelectorAll('.grid-2').forEach(el=>skObs.observe(el));
+const rObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});},{threshold:.08});
+document.querySelectorAll('.r').forEach(el=>rObs.observe(el));
+</script>
+</body>
+</html>
